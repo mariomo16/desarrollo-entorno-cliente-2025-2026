@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>mousemove</title>
+    </head>
+    <body></body>
+    <script>
+        // Creo el elemento imagen y le pongo los atributos necesarios
+        const crearImagen = document.createElement("img");
+        crearImagen.setAttribute("id", "imagen");
+        crearImagen.setAttribute("src", "./mousemove.png");
+
+        // Pongo la imagen en el body
+        document.getElementsByTagName("body")[0].appendChild(crearImagen);
+        // Puntero a la imagen y le doy el style position absolute para poder asignarle yo la posición exacta
+        const imagen = document.getElementById("imagen");
+        imagen.style.position = "absolute";
+
+        // Evento para mover la imagen
+        window.addEventListener("mousemove", function (moverRaton) {
+            imagen.style.left = moverRaton.clientX + "px";
+            imagen.style.top = moverRaton.clientY + "px";
+        });
+
+        let pintando = false;
+        window.addEventListener("mousedown", () => {
+            pintando = true;
+        });
+        window.addEventListener("mouseup", () => {
+            pintando = false;
+        });
+    </script>
+</html>

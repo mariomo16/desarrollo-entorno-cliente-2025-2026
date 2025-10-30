@@ -1,0 +1,18 @@
+:root {
+	font-family: sans-serif, Arial;
+	justify-content: center;
+	display: flex;
+	background-color: rgb(33, 33, 33);
+	color: white;
+}
+
+table,
+tr,
+th,
+td {
+	border: 1px solid gray;
+	border-collapse: collapse;
+	text-align: center;
+	padding: 5px;
+    margin: 20px 0px;
+}

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Tabla Dinámica</title>
+        <link rel="stylesheet" href="style.css" />
+        <script src="script.js" defer></script>
+    </head>
+    <body>
+        <table>
+            <caption>
+                Contenido nutricional por cada 100 g de alimento.
+            </caption>
+
+            <tr>
+                <th>Alimento</th>
+                <th>Calorías (kCal)</th>
+                <th>Grasas (g)</th>
+
+                <th>Proteína (g)</th>
+                <th>Carbohidratos (g)</th>
+                <th>Opciones</th>
+            </tr>
+
+            <tr>
+                <td>Arándano</td>
+                <td>49</td>
+                <td>0.2</td>
+
+                <td>0.4</td>
+                <td>12.7</td>
+                <td>
+                    <input type="button" class="edit" value="Editar">
+                </td>
+            </tr>
+
+            <tr>
+                <td>Plátano</td>
+                <td>90</td>
+                <td>0.3</td>
+
+                <td>1.0</td>
+                <td>23.5</td>
+                <td>
+                    <input type="button" class="edit" value="Editar">
+                </td>
+            </tr>
+
+            <tr>
+                <td>Cereza</td>
+                <td>46</td>
+                <td>0.4</td>
+
+                <td>0.9</td>
+                <td>10.9</td>
+                <td>
+                    <input type="button" class="edit" value="Editar">
+                </td>
+            </tr>
+
+            <tr>
+                <td>Fresa</td>
+                <td>37</td>
+                <td>0.5</td>
+
+                <td>0.8</td>
+                <td>8.3</td>
+                <td>
+                    <input type="button" class="edit" value="Editar">
+                </td>
+            </tr>
+        </table>
+        <div>
+            <input type="button" value="Guardar" id="save" class="options" disabled>
+            <input type="button" value="Cancelar" id="cancel" class="options" disabled>
+        </div>
+    </body>
+</html>
