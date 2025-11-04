@@ -1,0 +1,138 @@
+/* CSS hecho por ChatGPT-5 */
+
+:root {
+	--bg: #f7f9fb;
+	--card: #ffffff;
+	--text: #1f2937;
+	--muted: #6b7280;
+	--accent: #5b8def;
+	--radius: 8px;
+	--shadow: 0 6px 18px rgba(31, 41, 55, 0.06);
+	font-family: Inter, system-ui, sans-serif;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	background: var(--bg);
+	color: var(--text);
+	padding: 28px;
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	min-height: 100vh;
+}
+
+form {
+	width: 100%;
+	max-width: 400px;
+	background: var(--card);
+	padding: 20px 24px;
+	border-radius: var(--radius);
+	box-shadow: var(--shadow);
+	display: flex;
+	flex-direction: column;
+}
+
+label {
+	font-size: 0.95rem;
+	font-weight: 500;
+	color: var(--text);
+	margin-bottom: 4px;
+	display: inline-block;
+}
+
+input[type="text"],
+input[type="password"] {
+	width: 100%;
+	padding: 9px 12px;
+	border: 1px solid #e2e5ea;
+	border-radius: 6px;
+	font-size: 1rem;
+	outline: none;
+	background: #fff;
+	color: var(--text);
+	margin-bottom: 10px;
+	transition:
+		border-color 0.12s ease,
+		box-shadow 0.12s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+	border-color: var(--accent);
+	box-shadow: 0 0 0 3px rgba(91, 141, 239, 0.15);
+}
+
+.checkbox-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: -4px 0 12px 0;
+	font-size: 0.9rem;
+	color: var(--muted);
+}
+
+.checkbox-row input[type="checkbox"] {
+	width: 16px;
+	height: 16px;
+}
+
+#passwordhints {
+	background: #f9fbfd;
+	border: 1px dashed #e0e6f0;
+	padding: 10px 12px;
+	border-radius: 6px;
+	font-size: 0.9rem;
+	color: var(--muted);
+	margin-bottom: 12px;
+}
+
+#passwordhints p {
+	margin: 0 0 6px 0;
+	font-weight: 600;
+	color: var(--text);
+}
+
+#passwordhints ul {
+	margin: 0;
+	padding-left: 18px;
+}
+
+input[disabled] {
+	background: #f6f6f6;
+	color: #999;
+	cursor: not-allowed;
+}
+
+button#signup {
+	padding: 10px 14px;
+	border-radius: 8px;
+	border: none;
+	background: var(--accent);
+	color: #fff;
+	font-weight: 600;
+	font-size: 1rem;
+	cursor: pointer;
+	transition:
+		transform 0.08s ease,
+		box-shadow 0.12s ease,
+		opacity 0.12s ease;
+	box-shadow: 0 8px 20px rgba(91, 141, 239, 0.18);
+}
+
+button#signup:hover:not([disabled]) {
+	transform: translateY(-2px);
+}
+
+button#signup:active:not([disabled]) {
+	transform: translateY(0);
+}
+
+button[disabled] {
+	opacity: 0.6;
+	cursor: not-allowed;
+	box-shadow: none;
+}
