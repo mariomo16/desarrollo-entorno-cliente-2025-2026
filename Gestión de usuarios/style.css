@@ -296,9 +296,27 @@ dialog p strong {
 	margin-left: 4px;
 }
 
-/* Párrafo de no encontrado */
+/* Usuario creado*/
+dialog p#created {
+	background: #f7f9fb;
+	border: 0px;
+	color: var(--accent);
+	font-weight: 500;
+	padding: 14px 16px;
+}
+
+/* Usuario eliminado */
+dialog p#deleted {
+	background: #f7f9fb;
+	border: 0px;
+	color: var(--accent);
+	font-weight: 500;
+	padding: 14px 16px;
+}
+
+/* Usuario no encontrado */
 dialog p#notfound {
-	background: #fee;
+	background: #f7f9fb;
 	border: 0px;
 	color: #991b1b;
 	font-weight: 500;

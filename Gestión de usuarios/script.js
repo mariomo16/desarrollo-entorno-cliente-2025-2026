@@ -3,10 +3,10 @@
  *
  * @description CRUD de usuarios
  * @author Mario Morales Ortega
- * @version 1.0.0
+ * @version 1.1.0
  * @created 2025-11-04
  * @modified 2025-11-04
- * @see https://github.com/mariomo16/practice/tree/main/javascript/form-validator
+ * @see https://github.com/mariomo16/desarrollo-entorno-cliente-2025-2026/blob/main/Gesti%C3%B3n%20de%20usuarios
  *
  */
 
@@ -35,6 +35,19 @@ const info = document.createElement("dialog");
 // Función para mostrar todos los usuarios guardados
 function readUsers() {
 	limpiarPantalla();
+
+	const showUser = document.createElement("div");
+	showUser.classList.add("user-info");
+	users.forEach((user) => {
+		showUser.innerHTML += `
+            <p>DNI / NIE: <strong>${user.dni}</strong></p>
+            <p>Nombre: <strong>${user.name}</strong></p>
+            <p>Apellidos: <strong>${user.surname}</strong></p>
+            <p>Fecha de nacimiento: <strong>${user.birthdate}</strong></p>
+            </br>
+        `;
+	});
+	document.getElementsByTagName("main")[0].appendChild(showUser);
 }
 
 // Función que comprobara y pasara los datos del nuevo usuario a newUser()
@@ -52,7 +65,7 @@ function newUser() {
 		regexBirthdate.test(clientBirthdate) === true
 	) {
 		const birthdateArray = clientBirthdate.split("-");
-		const clientBirthdateFormat = `${birthdateArray[1]}/${birthdateArray[2]}/${birthdateArray[0]}`;
+		const clientBirthdateFormat = `${birthdateArray[2]}/${birthdateArray[1]}/${birthdateArray[0]}`;
 		createUser(
 			clientDniNie.toUpperCase(),
 			clientName,
@@ -76,6 +89,14 @@ function createUser(dni, name, surname, birthdate) {
 	};
 	// Meto el objeto al array de usuarios
 	users.push(user);
+	info.innerHTML = `
+        <p id="created">Usuario creado con éxito.</br> DNI/NIE creado: <strong>${dni}</strong></p>
+        <span>Pulse ESC para cerrar</span>
+    `;
+	document.getElementsByTagName("body")[0].appendChild(info);
+	limpiarPantalla();
+	info.close();
+	info.showModal();
 }
 
 // Función que mostrara los datos de un usuario en pantalla al introducir su DNI
@@ -181,6 +202,14 @@ function deleteUser() {
 		user === users.find((user) => user.dni === dni);
 	users.splice(users.findIndex(userForDelete), 1);
 	document.getElementById("readDNI").value = "";
+	info.innerHTML = `
+        <p id="deleted">Usuario eliminado con éxito.</br> DNI/NIE eliminado: <strong>${dni}</strong></p>
+        <span>Pulse ESC para cerrar</span>
+    `;
+	document.getElementsByTagName("body")[0].appendChild(info);
+	limpiarPantalla();
+	info.close();
+	info.showModal();
 }
 
 function checkInput() {
