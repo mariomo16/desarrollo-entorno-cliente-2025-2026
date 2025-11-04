@@ -1,13 +1,9 @@
 /**
- * script.js - Gestión de usuarios
- *
- * @description CRUD de usuarios
+ * @file script.js
+ * @description CRUD de usuarios - Gestión de usuarios
  * @author Mario Morales Ortega
- * @version 1.1.1
- * @created 2025-11-04
- * @modified 2025-11-04
- * @see https://github.com/mariomo16/desarrollo-entorno-cliente-2025-2026/blob/main/Gesti%C3%B3n%20de%20usuarios
- *
+ * @version 1.1.2
+ * @see {https://github.com/mariomo16/desarrollo-entorno-cliente-2025-2026/blob/main/Gesti%C3%B3n%20de%20usuarios}
  */
 
 // Array que contendrá todos los usuarios creados
@@ -32,9 +28,12 @@ document.getElementById("deleteUser").addEventListener("click", deleteUser);
 
 const info = document.createElement("dialog");
 
+readUsers();
+
 // Función para mostrar todos los usuarios guardados
 function readUsers() {
 	limpiarPantalla();
+	const panel = document.getElementsByTagName("main")[0];
 	users.forEach((user) => {
 		const showUser = document.createElement("div");
 		showUser.classList.add("user-info");
@@ -44,7 +43,9 @@ function readUsers() {
             <p>Apellidos: <strong>${user.surname}</strong></p>
             <p>Fecha de nacimiento: <strong>${user.birthdate}</strong></p>
         `;
-		document.getElementsByTagName("main")[0].appendChild(showUser);
+		panel.style.justifyContent = "flex-start";
+		panel.appendChild(showUser);
+		document.getElementById("readDNI").focus();
 	});
 }
 
@@ -54,7 +55,6 @@ function newUser() {
 	const clientName = document.getElementById("name").value;
 	const clientSurname = document.getElementById("surname").value;
 	const clientBirthdate = document.getElementById("birthdate").value;
-	const inputs = document.getElementsByTagName("input");
 
 	if (
 		regexDniNie.test(clientDniNie) &&
@@ -70,10 +70,6 @@ function newUser() {
 			clientSurname,
 			clientBirthdateFormat,
 		);
-	}
-
-	for (let i = 1; i < inputs.length; i++) {
-		inputs[i].value = "";
 	}
 }
 // Función que creara los usuarios y los metera al array de usuarios
@@ -103,23 +99,24 @@ function readUser() {
 		return;
 	}
 	limpiarPantalla();
+	const panel = document.getElementsByTagName("main")[0];
 
 	const input = document.getElementById("readDNI").value;
-	if (document.getElementsByClassName("user-info").length === 0) {
-		const dni = input.toUpperCase();
-		const user = users.find((user) => user.dni === dni);
-		const showUser = document.createElement("div");
-		showUser.classList.add("user-info");
-		showUser.innerHTML = `
-            <p>DNI / NIE: <strong>${user.dni}</strong></p>
-            <p>Nombre: <strong>${user.name}</strong></p>
-            <p>Apellidos: <strong>${user.surname}</strong></p>
-            <p>Fecha de nacimiento: <strong>${user.birthdate}</strong></p>
-        `;
-		document.getElementsByTagName("main")[0].appendChild(showUser);
-	}
+	const dni = input.toUpperCase();
+	const user = users.find((user) => user.dni === dni);
+	const showUser = document.createElement("div");
+	showUser.classList.add("user-info");
+	showUser.innerHTML = `
+        <p>DNI / NIE: <strong>${user.dni}</strong></p>
+        <p>Nombre: <strong>${user.name}</strong></p>
+        <p>Apellidos: <strong>${user.surname}</strong></p>
+        <p>Fecha de nacimiento: <strong>${user.birthdate}</strong></p>
+    `;
+	panel.style.justifyContent = "center";
+	panel.appendChild(showUser);
 	// Limpiar el input
 	document.getElementById("readDNI").value = "";
+	document.getElementById("readDNI").focus();
 }
 
 // Funcion para modificar los datos de algún usuario
@@ -128,6 +125,7 @@ function modifyUser() {
 		return;
 	}
 	limpiarPantalla();
+	const panel = document.getElementsByTagName("main")[0];
 
 	// Variable para leer el valor introducido
 	const input = document.getElementById("readDNI").value;
@@ -146,8 +144,8 @@ function modifyUser() {
         <p>Fecha de nacimiento: <strong>${user.birthdate}</strong></p>
         <button type="button" id="updateUser">Actualizar usuario</button>
     `;
-
-	document.getElementsByTagName("main")[0].appendChild(showUser);
+	panel.style.justifyContent = "center";
+	panel.appendChild(showUser);
 	// Si lo buscas por ID dice que va a llamar al evento tu prima
 	document
 		.getElementsByTagName("button")[0]
@@ -233,32 +231,31 @@ function checkInput() {
 
 // Función para crear el formulario para crear usuarios
 function createForm() {
-	if (document.getElementsByClassName("user-info").length === 1) {
-		document.getElementsByClassName("user-info")[0].remove();
-	}
-	if (document.getElementsByTagName("form").length === 0) {
-		const createForm = document.createElement("form");
-		createForm.innerHTML = `
-            <label for="dni">DNI / NIE</label>
-            <input type="text" name="dni" id="dni" required />
+	limpiarPantalla();
+	const panel = document.getElementsByTagName("main")[0];
+	const createForm = document.createElement("form");
+	createForm.innerHTML = `
+        <label for="dni">DNI / NIE</label>
+        <input type="text" name="dni" id="dni" required />
 
-            <label for="name">Nombre</label>
-            <input type="text" name="name" id="name" required />
+        <label for="name">Nombre</label>
+        <input type="text" name="name" id="name" required />
 
-            <label for="surname">Apellidos</label>
-            <input type="text" name="surname" id="surname" required />
+        <label for="surname">Apellidos</label>
+        <input type="text" name="surname" id="surname" required />
 
-            <label for="birthdate">Fecha de nacimiento</label>
-            <input type="date" name="birthdate" id="birthdate" required />
+        <label for="birthdate">Fecha de nacimiento</label>
+        <input type="date" name="birthdate" id="birthdate" required />
 
-            <button type="button" id="newUser">
-                Crear usuario
-            </button>
-        `;
-		document.getElementsByTagName("main")[0].appendChild(createForm);
-		// Les pongo los eventos
-		addEvents();
-	}
+        <button type="button" id="newUser">
+            Crear usuario
+        </button>
+    `;
+	panel.style.justifyContent = "center";
+	panel.appendChild(createForm);
+	// Les pongo los eventos
+	addEvents();
+	document.getElementById("dni").focus();
 }
 
 // Función para poner los eventos al formulario de creación de usuarios
@@ -305,5 +302,3 @@ function limpiarPantalla() {
 		}
 	}
 }
-
-readUsers();

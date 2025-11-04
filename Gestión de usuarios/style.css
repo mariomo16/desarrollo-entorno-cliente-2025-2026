@@ -23,7 +23,6 @@ body {
 	margin: 0;
 }
 
-/* Menú superior */
 nav {
 	width: 100%;
 	background: var(--card);
@@ -87,7 +86,6 @@ nav p.active {
 	font-weight: 600;
 }
 
-/* Contenedor principal */
 main {
 	flex: 1;
 	padding: 28px;
@@ -95,9 +93,8 @@ main {
 	flex-wrap: wrap;
 	justify-content: flex-start;
 	align-items: flex-start;
-	align-content: flex-start; /* Añade esto */
-	column-gap: 20px; /* Margen horizontal entre paneles */
-	row-gap: 12px; /* Margen vertical entre filas - reducido */
+	align-content: flex-start;
+	gap: 20px;
 }
 
 form {
@@ -119,8 +116,8 @@ label {
 	display: inline-block;
 }
 
-input[type="text"],
-input[type="date"] {
+form input[type="text"],
+form input[type="date"] {
 	width: 100%;
 	padding: 9px 12px;
 	border: 1px solid #e2e5ea;
@@ -135,16 +132,10 @@ input[type="date"] {
 		box-shadow 0.12s ease;
 }
 
-input[type="text"]:focus,
-input[type="date"]:focus {
+form input[type="text"]:focus,
+form input[type="date"]:focus {
 	border-color: var(--accent);
 	box-shadow: 0 0 0 3px rgba(91, 141, 239, 0.15);
-}
-
-input[disabled] {
-	background: #f6f6f6;
-	color: #999;
-	cursor: not-allowed;
 }
 
 button {
@@ -171,7 +162,6 @@ button:active {
 	transform: translateY(0);
 }
 
-/* Tarjeta de información de usuario */
 .user-info {
 	width: 100%;
 	max-width: 400px;
@@ -198,7 +188,6 @@ button:active {
 
 .user-info p:hover {
 	background: rgba(91, 141, 239, 0.08);
-	transform: translateX(4px);
 }
 
 strong {
@@ -212,7 +201,6 @@ span {
 	font-size: 0.9em;
 }
 
-/* Texto editable */
 .user-info p strong.editable {
 	background: #fff;
 	padding: 4px 8px;
@@ -237,7 +225,6 @@ span {
 	background: #fff;
 }
 
-/* Dialog personalizado */
 dialog {
 	position: fixed;
 	top: 50%;
@@ -285,22 +272,12 @@ dialog p {
 	transition: all 0.12s ease;
 }
 
-dialog p:last-child {
-	margin-bottom: 0;
-}
-
-dialog p:hover {
-	background: rgba(91, 141, 239, 0.08);
-	transform: translateX(4px);
-}
-
 dialog p strong {
 	font-weight: 600;
 	color: var(--accent);
 	margin-left: 4px;
 }
 
-/* Usuario creado*/
 dialog p#created {
 	background: #f7f9fb;
 	border: 0px;
@@ -309,7 +286,6 @@ dialog p#created {
 	padding: 14px 16px;
 }
 
-/* Usuario eliminado */
 dialog p#deleted {
 	background: #f7f9fb;
 	border: 0px;
@@ -318,7 +294,6 @@ dialog p#deleted {
 	padding: 14px 16px;
 }
 
-/* Usuario no encontrado */
 dialog p#notfound {
 	background: #f7f9fb;
 	border: 0px;
