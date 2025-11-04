@@ -1,3 +1,11 @@
+/**
+ * @file script.js
+ * @description Tabla dinámica
+ * @author Mario Morales Ortega
+ * @version 1.0.1
+ * @see {https://github.com/mariomo16/desarrollo-entorno-cliente-2025-2026/tree/main/Tabla%20Din%C3%A1mica}
+ */
+
 // Variable con el contenido de la tabla para poder cancelar la edición
 let backup = document.getElementsByTagName("table")[0].innerHTML;
 
@@ -18,8 +26,8 @@ function events() {
 	for (let i = 0; i < buttons.length - 2; i++) {
 		buttons[i].addEventListener("click", () => {
 			const nodes = buttons[i].parentNode.parentNode.children;
-            const parent = buttons[i].parentNode.parentNode.lastElementChild;
-            const button = parent.lastElementChild;
+			const parent = buttons[i].parentNode.parentNode.lastElementChild;
+			const button = parent.lastElementChild;
 			edit(nodes, button);
 		});
 	}
@@ -38,25 +46,24 @@ function edit(nodes, button) {
 	for (let i = 0; i < options.length; i++) {
 		options[i].removeAttribute("disabled");
 	}
-    button.value = "Editando";
-    button.setAttribute("disabled", true)
+	button.value = "Editando";
+	button.setAttribute("disabled", true);
 }
 
 // Función para guardar los cambios realizados
 function save() {
 	for (let i = 0; i < tds.length; i++) {
 		tds[i].removeAttribute("contenteditable");
-		tds[i].style.color = "white";
+		tds[i].style.color = "var(--text)";
 	}
 	for (let i = 0; i < options.length; i++) {
 		options[i].setAttribute("disabled", true);
 	}
-    const buttons = document.getElementsByClassName("edit");
-    for (let i = 0; i < buttons.length; i++) {
-        buttons[i].value = "Editar";
-        buttons[i].removeAttribute("disabled");
-        
-    }
+	const buttons = document.getElementsByClassName("edit");
+	for (let i = 0; i < buttons.length; i++) {
+		buttons[i].value = "Editar";
+		buttons[i].removeAttribute("disabled");
+	}
 	backup = document.getElementsByTagName("table")[0].innerHTML;
 }
 
