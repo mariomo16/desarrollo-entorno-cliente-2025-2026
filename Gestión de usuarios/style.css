@@ -92,8 +92,12 @@ main {
 	flex: 1;
 	padding: 28px;
 	display: flex;
-	justify-content: center;
+	flex-wrap: wrap;
+	justify-content: flex-start;
 	align-items: flex-start;
+	align-content: flex-start; /* Añade esto */
+	column-gap: 20px; /* Margen horizontal entre paneles */
+	row-gap: 12px; /* Margen vertical entre filas - reducido */
 }
 
 form {

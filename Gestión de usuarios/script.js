@@ -3,7 +3,7 @@
  *
  * @description CRUD de usuarios
  * @author Mario Morales Ortega
- * @version 1.1.0
+ * @version 1.1.1
  * @created 2025-11-04
  * @modified 2025-11-04
  * @see https://github.com/mariomo16/desarrollo-entorno-cliente-2025-2026/blob/main/Gesti%C3%B3n%20de%20usuarios
@@ -35,19 +35,17 @@ const info = document.createElement("dialog");
 // Función para mostrar todos los usuarios guardados
 function readUsers() {
 	limpiarPantalla();
-
-	const showUser = document.createElement("div");
-	showUser.classList.add("user-info");
 	users.forEach((user) => {
+		const showUser = document.createElement("div");
+		showUser.classList.add("user-info");
 		showUser.innerHTML += `
             <p>DNI / NIE: <strong>${user.dni}</strong></p>
             <p>Nombre: <strong>${user.name}</strong></p>
             <p>Apellidos: <strong>${user.surname}</strong></p>
             <p>Fecha de nacimiento: <strong>${user.birthdate}</strong></p>
-            </br>
         `;
+		document.getElementsByTagName("main")[0].appendChild(showUser);
 	});
-	document.getElementsByTagName("main")[0].appendChild(showUser);
 }
 
 // Función que comprobara y pasara los datos del nuevo usuario a newUser()
@@ -298,9 +296,14 @@ function limpiarPantalla() {
 		document.getElementsByTagName("form")[0].remove();
 	}
 
+	const userInfo = document.getElementsByClassName("user-info").length;
 	// Comprobar si la información de otro usuario esta en pantalla
-	if (document.getElementsByClassName("user-info").length !== 0) {
+	if (userInfo !== 0) {
 		// En el caso de que lo esté, lo borro del HTML
-		document.getElementsByClassName("user-info")[0].remove();
+		for (let i = 0; i <= userInfo - 1; i++) {
+			document.getElementsByClassName("user-info")[0].remove();
+		}
 	}
 }
+
+readUsers();
