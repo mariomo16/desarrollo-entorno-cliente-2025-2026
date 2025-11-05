@@ -63,7 +63,8 @@ function newUser() {
 		regexDniNie.test(clientDniNie) &&
 		regexNameSurname.test(clientName) &&
 		regexNameSurname.test(clientSurname) &&
-		regexBirthdate.test(clientBirthdate) === true && user === undefined
+		regexBirthdate.test(clientBirthdate) === true &&
+		user === undefined
 	) {
 		const birthdateArray = clientBirthdate.split("-");
 		const clientBirthdateFormat = `${birthdateArray[2]}/${birthdateArray[1]}/${birthdateArray[0]}`;
@@ -74,10 +75,10 @@ function newUser() {
 			clientBirthdateFormat,
 		);
 	} else {
-        document.getElementsByTagName("label")[0].classList.add("alreadyexists");
-        document.getElementById("dni").focus();
-        return;
-    }
+		document.getElementsByTagName("label")[0].classList.add("alreadyexists");
+		document.getElementById("dni").focus();
+		return;
+	}
 }
 // Función que creara los usuarios y los metera al array de usuarios
 function createUser(dni, name, surname, birthdate) {
@@ -309,6 +310,6 @@ function limpiarPantalla() {
 		}
 	}
 
-    // document.getElementById("readDNI").value = "";
-    document.getElementById("readDNI").style.borderColor = "#e2e5ea";
+	// document.getElementById("readDNI").value = "";
+	document.getElementById("readDNI").style.borderColor = "#e2e5ea";
 }
