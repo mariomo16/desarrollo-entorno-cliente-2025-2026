@@ -2,7 +2,7 @@
  * @file script.js
  * @description CRUD de usuarios - Gestión de usuarios
  * @author Mario Morales Ortega
- * @version 1.1.2
+ * @version 1.1.3
  * @see {https://github.com/mariomo16/desarrollo-entorno-cliente-2025-2026/blob/main/Gesti%C3%B3n%20de%20usuarios}
  */
 
@@ -56,11 +56,14 @@ function newUser() {
 	const clientSurname = document.getElementById("surname").value;
 	const clientBirthdate = document.getElementById("birthdate").value;
 
+	const dni = clientDniNie.toUpperCase();
+	const user = users.find((user) => user.dni === dni);
+
 	if (
 		regexDniNie.test(clientDniNie) &&
 		regexNameSurname.test(clientName) &&
 		regexNameSurname.test(clientSurname) &&
-		regexBirthdate.test(clientBirthdate) === true
+		regexBirthdate.test(clientBirthdate) === true && user === undefined
 	) {
 		const birthdateArray = clientBirthdate.split("-");
 		const clientBirthdateFormat = `${birthdateArray[2]}/${birthdateArray[1]}/${birthdateArray[0]}`;
@@ -70,7 +73,11 @@ function newUser() {
 			clientSurname,
 			clientBirthdateFormat,
 		);
-	}
+	} else {
+        document.getElementsByTagName("label")[0].classList.add("alreadyexists");
+        document.getElementById("dni").focus();
+        return;
+    }
 }
 // Función que creara los usuarios y los metera al array de usuarios
 function createUser(dni, name, surname, birthdate) {
@@ -239,10 +246,10 @@ function createForm() {
         <input type="text" name="dni" id="dni" required />
 
         <label for="name">Nombre</label>
-        <input type="text" name="name" id="name" required />
+        <input type="text" name="name" id="name" autocomplete="given-name" required />
 
         <label for="surname">Apellidos</label>
-        <input type="text" name="surname" id="surname" required />
+        <input type="text" name="surname" id="surname" autocomplete="family-name" required />
 
         <label for="birthdate">Fecha de nacimiento</label>
         <input type="date" name="birthdate" id="birthdate" required />
@@ -301,4 +308,7 @@ function limpiarPantalla() {
 			document.getElementsByClassName("user-info")[0].remove();
 		}
 	}
+
+    // document.getElementById("readDNI").value = "";
+    document.getElementById("readDNI").style.borderColor = "#e2e5ea";
 }
