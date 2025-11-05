@@ -310,9 +310,9 @@ dialog p#notfound strong {
 }
 
 .alreadyexists::after {
-    content: "DNI / NIE introducido ya existe";
-    color: #ef5350;
-    display: flex;
+	content: "DNI / NIE introducido ya existe";
+	color: #ef5350;
+	display: flex;
 	float: right;
 	font-size: 0.9em;
 }
