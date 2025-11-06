@@ -1,36 +1,90 @@
 /**
  * @file script.js
- * @description CRUD de usuarios - Gestión de usuarios
+ * @description Sistema CRUD para la gestión completa de usuarios con validación en tiempo real
  * @author Mario Morales Ortega
- * @version 1.1.3
- * @see {https://github.com/mariomo16/desarrollo-entorno-cliente-2025-2026/blob/main/Gesti%C3%B3n%20de%20usuarios}
+ * @version 1.2.0
+ * @see {@link https://github.com/mariomo16/desarrollo-entorno-cliente-2025-2026/blob/main/Gesti%C3%B3n%20de%20usuarios}
  */
 
-// Array que contendrá todos los usuarios creados
+/**
+ * @typedef {Object} User
+ * @property {string} dni - DNI o NIE del usuario en formato mayúsculas
+ * @property {string} name - Nombre del usuario
+ * @property {string} surname - Apellidos del usuario
+ * @property {string} birthdate - Fecha de nacimiento en formato DD/MM/YYYY
+ */
+
+/**
+ * Array que almacena todos los usuarios del sistema
+ * @type {User[]}
+ */
 const users = [];
 
-// Expresiones regulares para comprobar los datos
+/**
+ * Expresión regular para validar DNI español o NIE
+ * Formato: [XYZ]?[0-7][0-9]{6,7}[LETRA]
+ * @type {RegExp}
+ * @constant
+ */
 const regexDniNie = /^[XYZ]?\d{7,8}[TRWAGMYFPDXBNJZSQVHLCKE]$/i;
+
+/**
+ * Expresión regular para validar nombres y apellidos
+ * Permite letras (incluidos caracteres acentuados) y espacios entre palabras
+ * @type {RegExp}
+ * @constant
+ */
 const regexNameSurname =
 	/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+(\s[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+)*$/;
+
+/**
+ * Expresión regular para validar fechas en formato ISO (YYYY-MM-DD)
+ * @type {RegExp}
+ * @constant
+ */
 const regexBirthdate = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
 
-// Colores para datos validos e inválidos
+/**
+ * Color CSS para campos válidos
+ * @type {string}
+ * @constant
+ */
 const VALID_COLOR = "var(--text)";
+
+/**
+ * Color CSS para campos inválidos (rojo)
+ * @type {string}
+ * @constant
+ */
 const INVALID_COLOR = "#ef5350";
 
-// Eventos para las opciones del menú
+// ==================== INICIALIZACIÓN DE EVENTOS ====================
+
+/**
+ * Event listeners para las opciones del menú principal
+ */
 document.getElementById("readUsers").addEventListener("click", readUsers);
 document.getElementById("createUser").addEventListener("click", createForm);
 document.getElementById("readUser").addEventListener("click", readUser);
 document.getElementById("updateUser").addEventListener("click", modifyUser);
 document.getElementById("deleteUser").addEventListener("click", deleteUser);
 
+/**
+ * Elemento dialog para mostrar mensajes modales al usuario
+ * @type {HTMLDialogElement}
+ */
 const info = document.createElement("dialog");
 
+// Mostrar todos los usuarios al cargar la página
 readUsers();
 
-// Función para mostrar todos los usuarios guardados
+// ==================== FUNCIONES DE LECTURA ====================
+
+/**
+ * Muestra todos los usuarios almacenados en el sistema
+ * Limpia la pantalla y renderiza cada usuario en un div independiente
+ * @returns {void}
+ */
 function readUsers() {
 	limpiarPantalla();
 	const panel = document.getElementsByTagName("main")[0];
@@ -49,7 +103,44 @@ function readUsers() {
 	});
 }
 
-// Función que comprobara y pasara los datos del nuevo usuario a newUser()
+/**
+ * Busca y muestra un usuario específico por su DNI/NIE
+ * Valida la entrada antes de realizar la búsqueda
+ * @returns {void}
+ */
+function readUser() {
+	if (checkInput() === false) {
+		return;
+	}
+	limpiarPantalla();
+	const panel = document.getElementsByTagName("main")[0];
+
+	const input = document.getElementById("readDNI").value;
+	const dni = input.toUpperCase();
+	const user = users.find((user) => user.dni === dni);
+	const showUser = document.createElement("div");
+	showUser.classList.add("user-info");
+	showUser.innerHTML = `
+        <p>DNI / NIE: <strong>${user.dni}</strong></p>
+        <p>Nombre: <strong>${user.name}</strong></p>
+        <p>Apellidos: <strong>${user.surname}</strong></p>
+        <p>Fecha de nacimiento: <strong>${user.birthdate}</strong></p>
+    `;
+	panel.style.justifyContent = "center";
+	panel.appendChild(showUser);
+	// Limpiar el input
+	document.getElementById("readDNI").value = "";
+	document.getElementById("readDNI").focus();
+}
+
+// ==================== FUNCIONES DE CREACIÓN ====================
+
+/**
+ * Valida los datos del formulario y crea un nuevo usuario
+ * Comprueba que todos los campos cumplan con las expresiones regulares
+ * y que el DNI/NIE no esté duplicado
+ * @returns {void}
+ */
 function newUser() {
 	const clientDniNie = document.getElementById("dni").value;
 	const clientName = document.getElementById("name").value;
@@ -80,7 +171,16 @@ function newUser() {
 		return;
 	}
 }
-// Función que creara los usuarios y los metera al array de usuarios
+
+/**
+ * Crea un nuevo usuario y lo añade al array de usuarios
+ * Muestra un mensaje de confirmación mediante un dialog modal
+ * @param {string} dni - DNI o NIE del usuario
+ * @param {string} name - Nombre del usuario
+ * @param {string} surname - Apellidos del usuario
+ * @param {string} birthdate - Fecha de nacimiento en formato DD/MM/YYYY
+ * @returns {void}
+ */
 function createUser(dni, name, surname, birthdate) {
 	// Creo un objeto con los datos recibidos
 	const user = {
@@ -101,33 +201,78 @@ function createUser(dni, name, surname, birthdate) {
 	info.showModal();
 }
 
-// Función que mostrara los datos de un usuario en pantalla al introducir su DNI
-function readUser() {
-	if (checkInput() === false) {
-		return;
-	}
+/**
+ * Genera y muestra el formulario HTML para crear nuevos usuarios
+ * Configura los event listeners necesarios para la validación en tiempo real
+ * @returns {void}
+ */
+function createForm() {
 	limpiarPantalla();
 	const panel = document.getElementsByTagName("main")[0];
+	const createForm = document.createElement("form");
+	createForm.innerHTML = `
+        <label for="dni">DNI / NIE</label>
+        <input type="text" name="dni" id="dni" required />
 
-	const input = document.getElementById("readDNI").value;
-	const dni = input.toUpperCase();
-	const user = users.find((user) => user.dni === dni);
-	const showUser = document.createElement("div");
-	showUser.classList.add("user-info");
-	showUser.innerHTML = `
-        <p>DNI / NIE: <strong>${user.dni}</strong></p>
-        <p>Nombre: <strong>${user.name}</strong></p>
-        <p>Apellidos: <strong>${user.surname}</strong></p>
-        <p>Fecha de nacimiento: <strong>${user.birthdate}</strong></p>
+        <label for="name">Nombre</label>
+        <input type="text" name="name" id="name" autocomplete="given-name" required />
+
+        <label for="surname">Apellidos</label>
+        <input type="text" name="surname" id="surname" autocomplete="family-name" required />
+
+        <label for="birthdate">Fecha de nacimiento</label>
+        <input type="date" name="birthdate" id="birthdate" required />
+
+        <button type="button" id="newUser">
+            Crear usuario
+        </button>
     `;
 	panel.style.justifyContent = "center";
-	panel.appendChild(showUser);
-	// Limpiar el input
-	document.getElementById("readDNI").value = "";
-	document.getElementById("readDNI").focus();
+	panel.appendChild(createForm);
+	// Les pongo los eventos
+	addEvents();
+	document.getElementById("dni").focus();
 }
 
-// Funcion para modificar los datos de algún usuario
+/**
+ * Añade event listeners al formulario de creación de usuarios
+ * Valida cada campo en tiempo real cambiando el color del texto según su validez
+ * @returns {void}
+ */
+function addEvents() {
+	// Constantes con todos los campos del formulario
+	const clientDniNie = document.getElementById("dni");
+	const clientName = document.getElementById("name");
+	const clientSurname = document.getElementById("surname");
+	const clientBirthdate = document.getElementById("birthdate");
+	const buttonCreateUser = document.getElementById("newUser");
+
+	clientDniNie.addEventListener("input", () => {
+		const isValid = regexDniNie.test(clientDniNie.value);
+		clientDniNie.style.color = !isValid ? INVALID_COLOR : VALID_COLOR;
+	});
+	clientName.addEventListener("input", () => {
+		const isValid = regexNameSurname.test(clientName.value);
+		clientName.style.color = !isValid ? INVALID_COLOR : VALID_COLOR;
+	});
+	clientSurname.addEventListener("input", () => {
+		const isValid = regexNameSurname.test(clientSurname.value);
+		clientSurname.style.color = !isValid ? INVALID_COLOR : VALID_COLOR;
+	});
+	clientBirthdate.addEventListener("input", () => {
+		const isValid = regexBirthdate.test(clientBirthdate.value);
+		clientBirthdate.style.color = !isValid ? INVALID_COLOR : VALID_COLOR;
+	});
+	buttonCreateUser.addEventListener("click", newUser);
+}
+
+// ==================== FUNCIONES DE ACTUALIZACIÓN ====================
+
+/**
+ * Muestra el formulario de edición para un usuario específico
+ * Permite editar nombre y apellidos mediante campos contenteditable
+ * @returns {void}
+ */
 function modifyUser() {
 	if (checkInput() === false) {
 		return;
@@ -137,7 +282,6 @@ function modifyUser() {
 
 	// Variable para leer el valor introducido
 	const input = document.getElementById("readDNI").value;
-	// Compruebo si se esta mostrando otro usuario actualmente
 	// Convierto el valor introducido a mayúsculas
 	const dni = input.toUpperCase();
 	// Busco algún (object) user dentro de (array) users con el campo DNI igual al introducido
@@ -154,7 +298,7 @@ function modifyUser() {
     `;
 	panel.style.justifyContent = "center";
 	panel.appendChild(showUser);
-	// Si lo buscas por ID dice que va a llamar al evento tu prima
+	// Añadir event listener al botón de actualización
 	document
 		.getElementsByTagName("button")[0]
 		.addEventListener("click", updateUser);
@@ -162,7 +306,13 @@ function modifyUser() {
 	// Limpiar el input
 	document.getElementById("readDNI").value = "";
 }
-// Función para actualizar los datos modificados de un usuario
+
+/**
+ * Actualiza los datos modificados de un usuario
+ * Valida nombre y apellidos antes de guardar los cambios
+ * Muestra feedback visual en caso de datos inválidos
+ * @returns {void}
+ */
 function updateUser() {
 	const dni = document.getElementsByTagName("strong")[0].textContent;
 	const user = users.find((user) => user.dni === dni);
@@ -194,6 +344,13 @@ function updateUser() {
 	}
 }
 
+// ==================== FUNCIONES DE ELIMINACIÓN ====================
+
+/**
+ * Elimina un usuario del sistema por su DNI/NIE
+ * Valida la entrada y muestra confirmación tras la eliminación
+ * @returns {void}
+ */
 function deleteUser() {
 	if (checkInput() === false) {
 		return;
@@ -216,6 +373,13 @@ function deleteUser() {
 	info.showModal();
 }
 
+// ==================== FUNCIONES AUXILIARES ====================
+
+/**
+ * Valida el DNI/NIE introducido en el input de búsqueda
+ * Comprueba formato correcto y existencia del usuario en el sistema
+ * @returns {boolean} true si la validación es correcta, false en caso contrario
+ */
 function checkInput() {
 	const input = document.getElementById("readDNI").value;
 	const dni = input.toUpperCase();
@@ -237,63 +401,11 @@ function checkInput() {
 	}
 }
 
-// Función para crear el formulario para crear usuarios
-function createForm() {
-	limpiarPantalla();
-	const panel = document.getElementsByTagName("main")[0];
-	const createForm = document.createElement("form");
-	createForm.innerHTML = `
-        <label for="dni">DNI / NIE</label>
-        <input type="text" name="dni" id="dni" required />
-
-        <label for="name">Nombre</label>
-        <input type="text" name="name" id="name" autocomplete="given-name" required />
-
-        <label for="surname">Apellidos</label>
-        <input type="text" name="surname" id="surname" autocomplete="family-name" required />
-
-        <label for="birthdate">Fecha de nacimiento</label>
-        <input type="date" name="birthdate" id="birthdate" required />
-
-        <button type="button" id="newUser">
-            Crear usuario
-        </button>
-    `;
-	panel.style.justifyContent = "center";
-	panel.appendChild(createForm);
-	// Les pongo los eventos
-	addEvents();
-	document.getElementById("dni").focus();
-}
-
-// Función para poner los eventos al formulario de creación de usuarios
-function addEvents() {
-	// Constantes con todos los campos del formulario
-	const clientDniNie = document.getElementById("dni");
-	const clientName = document.getElementById("name");
-	const clientSurname = document.getElementById("surname");
-	const clientBirthdate = document.getElementById("birthdate");
-	const buttonCreateUser = document.getElementById("newUser");
-
-	clientDniNie.addEventListener("input", () => {
-		const isValid = regexDniNie.test(clientDniNie.value);
-		clientDniNie.style.color = !isValid ? INVALID_COLOR : VALID_COLOR;
-	});
-	clientName.addEventListener("input", () => {
-		const isValid = regexNameSurname.test(clientName.value);
-		clientName.style.color = !isValid ? INVALID_COLOR : VALID_COLOR;
-	});
-	clientSurname.addEventListener("input", () => {
-		const isValid = regexNameSurname.test(clientSurname.value);
-		clientSurname.style.color = !isValid ? INVALID_COLOR : VALID_COLOR;
-	});
-	clientBirthdate.addEventListener("input", () => {
-		const isValid = regexBirthdate.test(clientBirthdate.value);
-		clientBirthdate.style.color = !isValid ? INVALID_COLOR : VALID_COLOR;
-	});
-	buttonCreateUser.addEventListener("click", newUser);
-}
-
+/**
+ * Limpia el panel principal eliminando formularios y datos de usuarios mostrados
+ * Restablece el estilo del input de búsqueda
+ * @returns {void}
+ */
 function limpiarPantalla() {
 	// Comprobar si el formulario para crear un usuario esta en pantalla
 	if (document.getElementsByTagName("form").length === 1) {
@@ -310,6 +422,5 @@ function limpiarPantalla() {
 		}
 	}
 
-	// document.getElementById("readDNI").value = "";
 	document.getElementById("readDNI").style.borderColor = "#e2e5ea";
 }

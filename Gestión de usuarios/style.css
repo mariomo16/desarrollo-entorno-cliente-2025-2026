@@ -1,3 +1,9 @@
+/*
+	Variables de tema y tipografía global.
+	- Colores base (fondo, tarjetas, texto, acento)
+	- Radio de bordes y sombra estándar
+	- Tipografía del documento
+*/
 :root {
 	--bg: #f7f9fb;
 	--card: #ffffff;
@@ -9,10 +15,18 @@
 	font-family: Inter, system-ui, sans-serif;
 }
 
+/*
+	Normalización de caja para consistencia en medidas.
+*/
 * {
 	box-sizing: border-box;
 }
 
+/*
+	Disposición base de la página.
+	- Fondo y color de texto
+	- Layout flex vertical ocupando alto completo
+*/
 body {
 	background: var(--bg);
 	color: var(--text);
@@ -23,6 +37,9 @@ body {
 	margin: 0;
 }
 
+/*
+	Barra de navegación pegajosa con sombra y distribución de elementos.
+*/
 nav {
 	width: 100%;
 	background: var(--card);
@@ -36,6 +53,9 @@ nav {
 	z-index: 100;
 }
 
+/*
+	Campo de búsqueda en la barra de navegación.
+*/
 nav input[type="text"] {
 	padding: 9px 12px;
 	border: 1px solid #e2e5ea;
@@ -52,17 +72,26 @@ nav input[type="text"] {
 	max-width: 200px;
 }
 
+/*
+	Realce del input al enfocar para accesibilidad.
+*/
 nav input[type="text"]:focus {
 	border-color: var(--accent);
 	box-shadow: 0 0 0 3px rgba(91, 141, 239, 0.15);
 }
 
+/*
+	Contenedor del menú de navegación (elementos clicables).
+*/
 .nav-menu {
 	display: flex;
 	gap: 8px;
 	align-items: center;
 }
 
+/*
+	Ítems de navegación como pseudo-botones.
+*/
 nav p {
 	padding: 18px 20px;
 	margin: 0;
@@ -74,18 +103,27 @@ nav p {
 	border-bottom: 3px solid transparent;
 }
 
+/*
+	Estado hover: color y subrayado con color de acento.
+*/
 nav p:hover {
 	color: var(--text);
 	border-bottom-color: var(--accent);
 	background: rgba(91, 141, 239, 0.04);
 }
 
+/*
+	Estado activo del ítem de navegación.
+*/
 nav p.active {
 	color: var(--accent);
 	border-bottom-color: var(--accent);
 	font-weight: 600;
 }
 
+/*
+	Zona principal: contenedor flexible para tarjetas y formularios.
+*/
 main {
 	flex: 1;
 	padding: 28px;
@@ -97,6 +135,9 @@ main {
 	gap: 20px;
 }
 
+/*
+	Tarjeta de formulario de creación/edición.
+*/
 form {
 	width: 100%;
 	max-width: 400px;
@@ -108,6 +149,9 @@ form {
 	flex-direction: column;
 }
 
+/*
+	Etiquetas de campos de formulario.
+*/
 label {
 	font-size: 0.95rem;
 	font-weight: 500;
@@ -116,6 +160,9 @@ label {
 	display: inline-block;
 }
 
+/*
+	Campos de formulario: texto y fecha.
+*/
 form input[type="text"],
 form input[type="date"] {
 	width: 100%;
@@ -132,12 +179,18 @@ form input[type="date"] {
 		box-shadow 0.12s ease;
 }
 
+/*
+	Realce de campos al enfocar.
+*/
 form input[type="text"]:focus,
 form input[type="date"]:focus {
 	border-color: var(--accent);
 	box-shadow: 0 0 0 3px rgba(91, 141, 239, 0.15);
 }
 
+/*
+	Botón primario: aspecto y efectos interactivos.
+*/
 button {
 	padding: 10px 14px;
 	border-radius: 8px;
@@ -154,14 +207,23 @@ button {
 	box-shadow: 0 8px 20px rgba(91, 141, 239, 0.18);
 }
 
+/*
+	Leve elevación al pasar el ratón.
+*/
 button:hover {
 	transform: translateY(-2px);
 }
 
+/*
+	Rebote al hacer clic.
+*/
 button:active {
 	transform: translateY(0);
 }
 
+/*
+	Tarjeta de información de usuario.
+*/
 .user-info {
 	width: 100%;
 	max-width: 400px;
@@ -171,6 +233,9 @@ button:active {
 	box-shadow: var(--shadow);
 }
 
+/*
+	Filas de detalle dentro de la tarjeta de usuario.
+*/
 .user-info p {
 	font-size: 1rem;
 	color: var(--text);
@@ -182,18 +247,30 @@ button:active {
 	transition: all 0.12s ease;
 }
 
+/*
+	Elimina el margen inferior del último elemento.
+*/
 .user-info p:last-child {
 	margin-bottom: 0;
 }
 
+/*
+	Efecto hover sutil en filas de detalle.
+*/
 .user-info p:hover {
 	background: rgba(91, 141, 239, 0.08);
 }
 
+/*
+	Resaltado de valores clave con color de acento.
+*/
 strong {
 	color: var(--accent);
 }
 
+/*
+	Indicador contextual a la derecha (p. ej., "Editando").
+*/
 span {
 	display: flex;
 	float: right;
@@ -201,6 +278,9 @@ span {
 	font-size: 0.9em;
 }
 
+/*
+	Campos editables in-place (nombre y apellidos) con estilo distinguible.
+*/
 .user-info p strong.editable {
 	background: #fff;
 	padding: 4px 8px;
@@ -212,11 +292,17 @@ span {
 	min-width: 60px;
 }
 
+/*
+	Realce de borde al pasar el ratón por un campo editable.
+*/
 .user-info p strong.editable:hover {
 	border-color: var(--accent);
 	background: rgba(91, 141, 239, 0.05);
 }
 
+/*
+	Estado de foco para edición accesible.
+*/
 .user-info p strong.editable:focus {
 	outline: none;
 	border-style: solid;
@@ -225,6 +311,9 @@ span {
 	background: #fff;
 }
 
+/*
+	Cuadro de diálogo modal para feedback (creado/actualizado/eliminado/no encontrado).
+*/
 dialog {
 	position: fixed;
 	top: 50%;
@@ -241,6 +330,9 @@ dialog {
 	animation: dialogSlideUp 0.3s ease;
 }
 
+/*
+	Animación de entrada del diálogo (deslizamiento sutil hacia arriba + fade).
+*/
 @keyframes dialogSlideUp {
 	from {
 		transform: translate(-50%, -45%);
@@ -252,6 +344,9 @@ dialog {
 	}
 }
 
+/*
+	Encabezado del diálogo.
+*/
 dialog h3 {
 	margin: 0 0 20px 0;
 	padding-bottom: 16px;
@@ -261,6 +356,9 @@ dialog h3 {
 	color: var(--text);
 }
 
+/*
+	Filas de detalle dentro del diálogo.
+*/
 dialog p {
 	font-size: 1rem;
 	color: var(--text);
@@ -272,12 +370,18 @@ dialog p {
 	transition: all 0.12s ease;
 }
 
+/*
+	Resaltado de valores dentro del diálogo.
+*/
 dialog p strong {
 	font-weight: 600;
 	color: var(--accent);
 	margin-left: 4px;
 }
 
+/*
+	Mensaje de confirmación de creación.
+*/
 dialog p#created {
 	background: #f7f9fb;
 	border: 0px;
@@ -286,6 +390,9 @@ dialog p#created {
 	padding: 14px 16px;
 }
 
+/*
+	Mensaje de confirmación de eliminación.
+*/
 dialog p#deleted {
 	background: #f7f9fb;
 	border: 0px;
@@ -294,6 +401,9 @@ dialog p#deleted {
 	padding: 14px 16px;
 }
 
+/*
+	Mensaje de error cuando no se encuentra el usuario.
+*/
 dialog p#notfound {
 	background: #f7f9fb;
 	border: 0px;
@@ -302,6 +412,9 @@ dialog p#notfound {
 	padding: 14px 16px;
 }
 
+/*
+	Resaltado del valor problemático dentro del mensaje de error.
+*/
 dialog p#notfound strong {
 	color: #7f1d1d;
 	background: #fca5a5;
@@ -309,6 +422,9 @@ dialog p#notfound strong {
 	border-radius: 4px;
 }
 
+/*
+	Aviso de validación: DNI/NIE duplicado mostrado junto a la etiqueta.
+*/
 .alreadyexists::after {
 	content: "DNI / NIE introducido ya existe";
 	color: #ef5350;
