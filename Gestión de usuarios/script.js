@@ -2,7 +2,7 @@
  * @file script.js
  * @description Sistema CRUD para la gestión completa de usuarios con validación en tiempo real
  * @author Mario Morales Ortega
- * @version 1.2.0
+ * @version 1.2.2
  * @see {@link https://github.com/mariomo16/desarrollo-entorno-cliente-2025-2026/blob/main/Gesti%C3%B3n%20de%20usuarios}
  */
 
@@ -81,7 +81,7 @@ const users = [
  * @type {RegExp}
  * @constant
  */
-const regexDniNie = /^[XYZ]?\d{7,8}[TRWAGMYFPDXBNJZSQVHLCKE]$/i;
+const dniPattern = /^[XYZ]?\d{7,8}[TRWAGMYFPDXBNJZSQVHLCKE]$/i;
 
 /**
  * Expresión regular para validar nombres y apellidos
@@ -89,15 +89,14 @@ const regexDniNie = /^[XYZ]?\d{7,8}[TRWAGMYFPDXBNJZSQVHLCKE]$/i;
  * @type {RegExp}
  * @constant
  */
-const regexNameSurname =
-	/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+(\s[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+)*$/;
+const namePattern = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+(\s[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+)*$/;
 
 /**
  * Expresión regular para validar fechas en formato ISO (YYYY-MM-DD)
  * @type {RegExp}
  * @constant
  */
-const regexBirthdate = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+const datePattern = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
 
 /**
  * Color CSS para campos válidos
@@ -142,18 +141,18 @@ readUsers();
  */
 function readUsers() {
 	limpiarPantalla();
-	const panel = document.getElementsByTagName("main")[0];
+	const mainContent = document.getElementById("main-content");
 	users.forEach((user) => {
-		const showUser = document.createElement("div");
-		showUser.classList.add("user-info");
-		showUser.innerHTML += `
+		const userData = document.createElement("div");
+		userData.classList.add("user-info");
+		userData.innerHTML += `
             <p>DNI / NIE: <strong>${user.dni}</strong></p>
             <p>Nombre: <strong>${user.name}</strong></p>
             <p>Apellidos: <strong>${user.surname}</strong></p>
             <p>Fecha de nacimiento: <strong>${user.birthdate}</strong></p>
         `;
-		panel.appendChild(showUser);
-		document.getElementById("readDNI").focus();
+		mainContent.appendChild(userData);
+		document.getElementById("search").focus();
 	});
 }
 
@@ -167,23 +166,23 @@ function readUser() {
 		return;
 	}
 	limpiarPantalla();
-	const panel = document.getElementsByTagName("main")[0];
+	const mainContent = document.getElementById("main-content");
 
-	const input = document.getElementById("readDNI").value;
-	const dni = input.toUpperCase();
-	const user = users.find((user) => user.dni === dni);
-	const showUser = document.createElement("div");
-	showUser.classList.add("user-info");
-	showUser.innerHTML = `
+	const input = document.getElementById("search").value;
+	const id = input.toUpperCase();
+	const user = users.find((user) => user.dni === id);
+	const userData = document.createElement("div");
+	userData.classList.add("user-info");
+	userData.innerHTML = `
         <p>DNI / NIE: <strong>${user.dni}</strong></p>
         <p>Nombre: <strong>${user.name}</strong></p>
         <p>Apellidos: <strong>${user.surname}</strong></p>
         <p>Fecha de nacimiento: <strong>${user.birthdate}</strong></p>
     `;
-	panel.appendChild(showUser);
+	mainContent.appendChild(userData);
 	// Limpiar el input
-	document.getElementById("readDNI").value = "";
-	document.getElementById("readDNI").focus();
+	document.getElementById("search").value = "";
+	document.getElementById("search").focus();
 }
 
 // ==================== FUNCIONES DE CREACIÓN ====================
@@ -195,34 +194,35 @@ function readUser() {
  * @returns {void}
  */
 function newUser() {
-	const clientDniNie = document.getElementById("dni").value;
-	const clientName = document.getElementById("name").value;
-	const clientSurname = document.getElementById("surname").value;
-	const clientBirthdate = document.getElementById("birthdate").value;
+	const idInput = document.getElementById("dni").value;
+	const nameInput = document.getElementById("name").value;
+	const surnameInput = document.getElementById("surname").value;
+	const birthdateInput = document.getElementById("birthdate").value;
 
-	const dni = clientDniNie.toUpperCase();
-	const user = users.find((user) => user.dni === dni);
+	const id = idInput.toUpperCase();
+	const user = users.find((user) => user.dni === id);
 
 	if (
-		regexDniNie.test(clientDniNie) &&
-		regexNameSurname.test(clientName) &&
-		regexNameSurname.test(clientSurname) &&
-		regexBirthdate.test(clientBirthdate) === true &&
+		dniPattern.test(idInput) &&
+		namePattern.test(nameInput) &&
+		namePattern.test(surnameInput) &&
+		datePattern.test(birthdateInput) === true &&
 		user === undefined
 	) {
-		const birthdateArray = clientBirthdate.split("-");
-		const clientBirthdateFormat = `${birthdateArray[2]}/${birthdateArray[1]}/${birthdateArray[0]}`;
-		createUser(
-			clientDniNie.toUpperCase(),
-			clientName,
-			clientSurname,
-			clientBirthdateFormat,
-		);
-	} else {
-		document.getElementsByTagName("label")[0].classList.add("alreadyexists");
-		document.getElementById("dni").focus();
+		const splittedDate = birthdateInput.split("-");
+		const birthdate = `${splittedDate[2]}/${splittedDate[1]}/${splittedDate[0]}`;
+		// Creo un objeto con los datos recibidos
+		const userData = {
+			dni: idInput,
+			name: nameInput,
+			surname: surnameInput,
+			birthdate: birthdate,
+		};
+		createUser(userData);
 		return;
 	}
+	document.getElementsByTagName("label")[0].classList.add("invalid");
+	document.getElementById("dni").focus();
 }
 
 /**
@@ -234,18 +234,11 @@ function newUser() {
  * @param {string} birthdate - Fecha de nacimiento en formato DD/MM/YYYY
  * @returns {void}
  */
-function createUser(dni, name, surname, birthdate) {
-	// Creo un objeto con los datos recibidos
-	const user = {
-		dni: dni,
-		name: name,
-		surname: surname,
-		birthdate: birthdate,
-	};
+function createUser(user) {
 	// Meto el objeto al array de usuarios
 	users.push(user);
 	info.innerHTML = `
-        <p id="created">Usuario creado con éxito.</br> DNI/NIE creado: <strong>${dni}</strong></p>
+        <p id="created">Usuario creado con éxito.</br> DNI/NIE creado: <strong>${user.dni}</strong></p>
         <span>Pulse ESC para cerrar</span>
     `;
 	document.getElementsByTagName("body")[0].appendChild(info);
@@ -261,7 +254,7 @@ function createUser(dni, name, surname, birthdate) {
  */
 function createForm() {
 	limpiarPantalla();
-	const panel = document.getElementsByTagName("main")[0];
+	const panel = document.getElementById("main-content");
 	const createForm = document.createElement("form");
 	createForm.innerHTML = `
         <label for="dni">DNI / NIE</label>
@@ -292,30 +285,22 @@ function createForm() {
  * @returns {void}
  */
 function addEvents() {
-	// Constantes con todos los campos del formulario
-	const clientDniNie = document.getElementById("dni");
-	const clientName = document.getElementById("name");
-	const clientSurname = document.getElementById("surname");
-	const clientBirthdate = document.getElementById("birthdate");
-	const buttonCreateUser = document.getElementById("newUser");
+	const createUserbtn = document.getElementById("newUser");
+	// Mapa con todos los campos del formulario y sus Regex
+	const inputValidationMap = new Map([
+		[document.getElementById("dni"), dniPattern],
+		[document.getElementById("name"), namePattern],
+		[document.getElementById("surname"), namePattern],
+		[document.getElementById("birthdate"), datePattern],
+	]);
 
-	clientDniNie.addEventListener("input", () => {
-		const isValid = regexDniNie.test(clientDniNie.value);
-		clientDniNie.style.color = !isValid ? INVALID_COLOR : VALID_COLOR;
-	});
-	clientName.addEventListener("input", () => {
-		const isValid = regexNameSurname.test(clientName.value);
-		clientName.style.color = !isValid ? INVALID_COLOR : VALID_COLOR;
-	});
-	clientSurname.addEventListener("input", () => {
-		const isValid = regexNameSurname.test(clientSurname.value);
-		clientSurname.style.color = !isValid ? INVALID_COLOR : VALID_COLOR;
-	});
-	clientBirthdate.addEventListener("input", () => {
-		const isValid = regexBirthdate.test(clientBirthdate.value);
-		clientBirthdate.style.color = !isValid ? INVALID_COLOR : VALID_COLOR;
-	});
-	buttonCreateUser.addEventListener("click", newUser);
+	for (const [inputElement, pattern] of inputValidationMap) {
+		inputElement.addEventListener("input", () => {
+			const isValid = pattern.test(inputElement.value);
+			inputElement.style.color = !isValid ? INVALID_COLOR : VALID_COLOR;
+		});
+	}
+	createUserbtn.addEventListener("click", newUser);
 }
 
 // ==================== FUNCIONES DE ACTUALIZACIÓN ====================
@@ -330,32 +315,32 @@ function modifyUser() {
 		return;
 	}
 	limpiarPantalla();
-	const panel = document.getElementsByTagName("main")[0];
+	const panel = document.getElementById("main-content");
 
 	// Variable para leer el valor introducido
-	const input = document.getElementById("readDNI").value;
+	const input = document.getElementById("search").value;
 	// Convierto el valor introducido a mayúsculas
-	const dni = input.toUpperCase();
+	const id = input.toUpperCase();
 	// Busco algún (object) user dentro de (array) users con el campo DNI igual al introducido
-	const user = users.find((user) => user.dni === dni);
+	const user = users.find((user) => user.dni === id);
 	// Creo el div donde se mostraran los datos del usuario
-	const showUser = document.createElement("div");
-	showUser.classList.add("user-info");
-	showUser.innerHTML = `
+	const userPanel = document.createElement("div");
+	userPanel.classList.add("user-info");
+	userPanel.innerHTML = `
         <p>DNI / NIE: <strong>${user.dni}</strong></p>
         <p>Nombre: <strong class="editable" contenteditable>${user.name}</strong><span>Editando</span></p>
         <p>Apellidos: <strong class="editable" contenteditable>${user.surname}</strong><span>Editando</span></p>
         <p>Fecha de nacimiento: <strong>${user.birthdate}</strong></p>
         <button type="button" id="updateUser">Actualizar usuario</button>
     `;
-	panel.appendChild(showUser);
+	panel.appendChild(userPanel);
 	// Añadir event listener al botón de actualización
 	document
 		.getElementsByTagName("button")[0]
 		.addEventListener("click", updateUser);
 
 	// Limpiar el input
-	document.getElementById("readDNI").value = "";
+	document.getElementById("search").value = "";
 }
 
 /**
@@ -365,18 +350,15 @@ function modifyUser() {
  * @returns {void}
  */
 function updateUser() {
-	const dni = document.getElementsByTagName("strong")[0].textContent;
-	const user = users.find((user) => user.dni === dni);
-	const clientName = document.getElementsByTagName("strong")[1].textContent;
-	const clientSurname = document.getElementsByTagName("strong")[2].textContent;
+	const id = document.getElementsByTagName("strong")[0].textContent;
+	const user = users.find((user) => user.dni === id);
+	const userName = document.getElementsByTagName("strong")[1].textContent;
+	const userSurname = document.getElementsByTagName("strong")[2].textContent;
 
-	if (
-		regexNameSurname.test(clientName) &&
-		regexNameSurname.test(clientSurname) === true
-	) {
+	if (namePattern.test(userName) && namePattern.test(userSurname) === true) {
 		limpiarPantalla();
-		user.name = clientName;
-		user.surname = clientSurname;
+		user.name = userName;
+		user.surname = userSurname;
 		info.innerHTML = `
             <h3>Usuario actualizado</h3>
             <p>DNI / NIE: <strong>${user.dni}</strong></p>
@@ -388,10 +370,16 @@ function updateUser() {
 		document.getElementsByTagName("body")[0].appendChild(info);
 		info.showModal();
 	} else {
-		document.getElementsByTagName("p")[5].style.borderColor =
-			regexNameSurname.test(clientName) ? "var(--accent)" : INVALID_COLOR;
-		document.getElementsByTagName("p")[6].style.borderColor =
-			regexNameSurname.test(clientSurname) ? "var(--accent)" : INVALID_COLOR;
+		document.getElementsByTagName("p")[5].style.borderColor = namePattern.test(
+			userName,
+		)
+			? "var(--accent)"
+			: INVALID_COLOR;
+		document.getElementsByTagName("p")[6].style.borderColor = namePattern.test(
+			userSurname,
+		)
+			? "var(--accent)"
+			: INVALID_COLOR;
 	}
 }
 
@@ -408,12 +396,12 @@ function deleteUser() {
 	}
 	limpiarPantalla();
 
-	const input = document.getElementById("readDNI").value;
+	const input = document.getElementById("search").value;
 	const dni = input.toUpperCase();
 	const userForDelete = (user) =>
 		user === users.find((user) => user.dni === dni);
 	users.splice(users.findIndex(userForDelete), 1);
-	document.getElementById("readDNI").value = "";
+	document.getElementById("search").value = "";
 	info.innerHTML = `
         <p id="deleted">Usuario eliminado con éxito.</br> DNI/NIE eliminado: <strong>${dni}</strong></p>
         <span>Pulse ESC para cerrar</span>
@@ -432,12 +420,12 @@ function deleteUser() {
  * @returns {boolean} true si la validación es correcta, false en caso contrario
  */
 function checkInput() {
-	const input = document.getElementById("readDNI").value;
+	const input = document.getElementById("search").value;
 	const dni = input.toUpperCase();
-	if (input === "" || regexDniNie.test(input) !== true) {
-		document.getElementById("readDNI").style.borderColor = INVALID_COLOR;
+	if (input === "" || dniPattern.test(input) !== true) {
+		document.getElementById("search").style.borderColor = INVALID_COLOR;
 		return false;
-	} else document.getElementById("readDNI").style.borderColor = "#e2e5ea";
+	} else document.getElementById("search").style.borderColor = "#e2e5ea";
 	const user = users.find((user) => user.dni === dni);
 	if (user === undefined) {
 		info.innerHTML = `
@@ -458,20 +446,13 @@ function checkInput() {
  * @returns {void}
  */
 function limpiarPantalla() {
-	// Comprobar si el formulario para crear un usuario esta en pantalla
-	if (document.getElementsByTagName("form").length === 1) {
-		// En el caso de que lo esté, lo borro del HTML
-		document.getElementsByTagName("form")[0].remove();
-	}
-
-	const userInfo = document.getElementsByClassName("user-info").length;
-	// Comprobar si la información de otro usuario esta en pantalla
-	if (userInfo !== 0) {
-		// En el caso de que lo esté, lo borro del HTML
-		for (let i = 0; i <= userInfo - 1; i++) {
-			document.getElementsByClassName("user-info")[0].remove();
+	const main = document.getElementById("main-content").children;
+	const mainLength = main.length;
+	if (mainLength !== 0) {
+		for (let i = 0; i <= mainLength - 1; i++) {
+			main[0].remove();
 		}
+		return;
 	}
-
-	document.getElementById("readDNI").style.borderColor = "#e2e5ea";
+	document.getElementById("search").style.borderColor = "#e2e5ea";
 }

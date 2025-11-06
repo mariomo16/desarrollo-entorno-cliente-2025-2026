@@ -435,8 +435,8 @@ dialog p#notfound strong {
 /*
 	Aviso de validación: DNI/NIE duplicado mostrado junto a la etiqueta.
 */
-.alreadyexists::after {
-	content: "DNI / NIE introducido ya existe";
+.invalid::after {
+	content: "error";
 	color: #ef5350;
 	display: flex;
 	float: right;
