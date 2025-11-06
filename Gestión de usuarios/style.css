@@ -13,6 +13,16 @@
 	--radius: 8px;
 	--shadow: 0 6px 18px rgba(31, 41, 55, 0.06);
 	font-family: Inter, system-ui, sans-serif;
+	/* Esconder el scrollbar manteniendo funcionalidad  (IE y Edge) */
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}
+
+/* 
+    Esconder el scrollbar manteniendo funcionalidad  (Chrome, Safari y Opera)
+*/
+:root:-webkit-scrollbar {
+	display: none;
 }
 
 /*
@@ -129,7 +139,7 @@ main {
 	padding: 28px;
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: flex-start;
+	justify-content: center;
 	align-items: flex-start;
 	align-content: flex-start;
 	gap: 20px;

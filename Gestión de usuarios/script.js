@@ -18,7 +18,62 @@
  * Array que almacena todos los usuarios del sistema
  * @type {User[]}
  */
-const users = [];
+const users = [
+	{
+		dni: "12345678Z",
+		name: "Ana",
+		surname: "García López",
+		birthdate: "15/03/1995",
+	},
+	{
+		dni: "87654321M",
+		name: "Luis",
+		surname: "Pérez Gómez",
+		birthdate: "02/11/1988",
+	},
+	{
+		dni: "11223344A",
+		name: "María",
+		surname: "Sánchez Ruiz",
+		birthdate: "25/07/1992",
+	},
+	{
+		dni: "99887766H",
+		name: "Carlos",
+		surname: "Fernández Díaz",
+		birthdate: "09/01/1985",
+	},
+	{
+		dni: "X1234567T",
+		name: "Laura",
+		surname: "Martín Ortega",
+		birthdate: "30/06/2000",
+	},
+	{
+		dni: "Y7654321K",
+		name: "Javier",
+		surname: "Romero Navarro",
+		birthdate: "12/12/1998",
+	},
+	{
+		dni: "13579246P",
+		name: "Elena",
+		surname: "Torres Castro",
+		birthdate: "05/05/1993",
+	},
+	{
+		dni: "24681357L",
+		name: "Sergio",
+		surname: "Alonso Molina",
+		birthdate: "21/09/1990",
+	},
+	{
+		dni: "Z1029384Q",
+		name: "Patricia",
+		surname: "Núñez Cabrera",
+		birthdate: "17/04/1997",
+	},
+];
 
 /**
  * Expresión regular para validar DNI español o NIE
@@ -97,7 +152,6 @@ function readUsers() {
             <p>Apellidos: <strong>${user.surname}</strong></p>
             <p>Fecha de nacimiento: <strong>${user.birthdate}</strong></p>
         `;
-		panel.style.justifyContent = "flex-start";
 		panel.appendChild(showUser);
 		document.getElementById("readDNI").focus();
 	});
@@ -126,7 +180,6 @@ function readUser() {
         <p>Apellidos: <strong>${user.surname}</strong></p>
         <p>Fecha de nacimiento: <strong>${user.birthdate}</strong></p>
     `;
-	panel.style.justifyContent = "center";
 	panel.appendChild(showUser);
 	// Limpiar el input
 	document.getElementById("readDNI").value = "";
@@ -227,7 +280,6 @@ function createForm() {
             Crear usuario
         </button>
     `;
-	panel.style.justifyContent = "center";
 	panel.appendChild(createForm);
 	// Les pongo los eventos
 	addEvents();
@@ -296,7 +348,6 @@ function modifyUser() {
         <p>Fecha de nacimiento: <strong>${user.birthdate}</strong></p>
         <button type="button" id="updateUser">Actualizar usuario</button>
     `;
-	panel.style.justifyContent = "center";
 	panel.appendChild(showUser);
 	// Añadir event listener al botón de actualización
 	document
