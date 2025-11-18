@@ -2,7 +2,7 @@
  * @file script.js
  * @description Sistema CRUD para la gestión completa de usuarios con validación en tiempo real
  * @author Mario Morales Ortega
- * @version 1.2.2
+ * @version 1.2.3
  * @see {@link https://github.com/mariomo16/desarrollo-entorno-cliente-2025-2026/blob/main/Gesti%C3%B3n%20de%20usuarios}
  */
 
@@ -199,11 +199,11 @@ function newUser() {
 	const surnameInput = document.getElementById("surname").value;
 	const birthdateInput = document.getElementById("birthdate").value;
 
-	const id = idInput.toUpperCase();
+  const id = idInput.toUpperCase();
 	const user = users.find((user) => user.dni === id);
 
 	if (
-		dniPattern.test(idInput) &&
+		dniPattern.test(id) &&
 		namePattern.test(nameInput) &&
 		namePattern.test(surnameInput) &&
 		datePattern.test(birthdateInput) === true &&
@@ -213,7 +213,7 @@ function newUser() {
 		const birthdate = `${splittedDate[2]}/${splittedDate[1]}/${splittedDate[0]}`;
 		// Creo un objeto con los datos recibidos
 		const userData = {
-			dni: idInput,
+			dni: id,
 			name: nameInput,
 			surname: surnameInput,
 			birthdate: birthdate,
