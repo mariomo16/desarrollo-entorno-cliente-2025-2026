@@ -3,7 +3,7 @@
  * @description Sistema CRUD para la gestión completa de usuarios con validación en tiempo real
  * @author Mario Morales Ortega
  * @version dev
- * @see {@link https://github.com/mariomo16/desarrollo-entorno-cliente-2025-2026/blob/main/Gesti%C3%B3n%20de%20usuarios}
+ * @see {@link https://github.com/mariomo16/desarrollo-entorno-cliente-2025-2026/blob/main/Gesti%C3%B3n%20de%20usuarios/dev}
  */
 
 /**
@@ -191,17 +191,20 @@ function readUser() {
 	}
 	clear();
 
+	const usersArray = Array.isArray(user) ? user : [user];
+
 	const mainContent = document.getElementById("main-content");
-	const userData = document.createElement("div");
-	userData.classList.add("user-info");
-	userData.innerHTML = `
-        <p>DNI / NIE: <strong>${user.dni}</strong></p>
-        <p>Nombre: <strong>${user.name}</strong></p>
-        <p>Apellidos: <strong>${user.surname}</strong></p>
-        <p>Fecha de nacimiento: <strong>${user.birthdate}</strong></p>
-    `;
-	mainContent.appendChild(userData);
-	// Limpiar el input
+	usersArray.forEach((user) => {
+		const userData = document.createElement("div");
+		userData.classList.add("user-info");
+		userData.innerHTML += `
+            <p>DNI / NIE: <strong>${user.dni}</strong></p>
+            <p>Nombre: <strong>${user.name}</strong></p>
+            <p>Apellidos: <strong>${user.surname}</strong></p>
+            <p>Fecha de nacimiento: <strong>${user.birthdate}</strong></p>
+        `;
+		mainContent.appendChild(userData);
+	});
 	document.getElementById("search").focus();
 }
 
@@ -230,7 +233,7 @@ function newUser() {
 		datePattern.test(birthdateInput.value) === true &&
 		user === undefined
 	) {
-		const splittedDate = birthdateInput.split("-");
+		const splittedDate = birthdateInput.value.split("-");
 		const birthdate = `${splittedDate[2]}/${splittedDate[1]}/${splittedDate[0]}`;
 		// Creo un objeto con los datos recibidos
 		const userData = {
@@ -451,16 +454,21 @@ function checkInput(input) {
  * @returns {User|undefined} Usuario encontrado o undefined si no existe
  */
 function searchUser(input) {
+	/*
+	 * let resultado = clientes.filter((clientes) =>
+	 *  clientes.nombre.toLowerCase().includes(nombreBusqueda.toLowerCase())
+	 * );
+	 */
 	const user =
 		dniPattern.test(input) === true
 			? users.find((user) => user.dni === input.toUpperCase())
-			: users.find(
-					(user) => user.name.toLocaleUpperCase() === input.toLocaleUpperCase(),
+			: users.filter((user) =>
+					user.name.toLocaleUpperCase().includes(input.toLocaleUpperCase()),
 				);
-	if (user !== undefined) {
-		return user;
-	} else {
+	if (user === undefined || user.length === 0) {
 		return undefined;
+	} else {
+		return user;
 	}
 }
 
@@ -518,7 +526,7 @@ function notifications(result, input, user) {
 
 /**
  * Limpia el contenedor principal eliminando todos los elementos hijos
- * También resetea el valor y el color del borde del input de búsqueda
+ * También restablece el valor y el color del borde del input de búsqueda
  * @returns {void}
  */
 function clear() {
