@@ -155,7 +155,7 @@ function readUsers() {
 	if (document.getElementById("search").style.borderColor !== "#e2e5ea") {
 		document.getElementById("search").style.borderColor = "#e2e5ea";
 	}
-	if (document.getElementsByClassName("user-info").length === 0) {
+	if (document.getElementsByClassName("user-info").length < users.length) {
 		clear();
 		const mainContent = document.getElementById("main-content");
 		users.forEach((user) => {
@@ -453,6 +453,7 @@ function checkInput(input) {
  * La búsqueda es case-insensitive
  * @param {string} input - DNI/NIE o nombre a buscar
  * @returns {User|undefined} Usuario encontrado o undefined si no existe
+ * @see {@link https://github.com/mariomo16/desarrollo-entorno-cliente-2023-2024/blob/main/U.T.%206./CRUD%20de%20clientes/crudClientesV2.js#L107}
  */
 function searchUser(input) {
 	const user =
