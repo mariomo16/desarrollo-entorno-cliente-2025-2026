@@ -131,6 +131,9 @@ document.addEventListener("keydown", (event) => {
 	if (event.key === "Escape") {
 		readUsers();
 	}
+	if (event.key === "Enter") {
+		readUser();
+	}
 });
 
 /**
@@ -460,7 +463,7 @@ function searchUser(input) {
 		dniPattern.test(input) === true
 			? users.find((user) => user.dni === input.toUpperCase())
 			: users.filter((user) =>
-					user.name.toLocaleUpperCase().includes(input.toLocaleUpperCase()),
+					user.surname.toLocaleUpperCase().includes(input.toLocaleUpperCase()),
 				);
 	if (user === undefined || user.length === 0) {
 		return undefined;
