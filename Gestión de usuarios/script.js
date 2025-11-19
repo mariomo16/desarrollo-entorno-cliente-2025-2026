@@ -2,7 +2,7 @@
  * @file script.js
  * @description Sistema CRUD para la gestión completa de usuarios con validación en tiempo real
  * @author Mario Morales Ortega
- * @version 1.3.1
+ * @version 1.3.2
  * @see {@link https://github.com/mariomo16/desarrollo-entorno-cliente-2025-2026/blob/main/Gesti%C3%B3n%20de%20usuarios}
  */
 
@@ -131,6 +131,9 @@ document.addEventListener("keydown", (event) => {
 	if (event.key === "Escape") {
 		readUsers();
 	}
+	if (event.key === "Enter") {
+		readUser();
+	}
 });
 
 /**
@@ -140,7 +143,6 @@ document.addEventListener("keydown", (event) => {
 const info = document.createElement("dialog");
 
 // Mostrar todos los usuarios al cargar la página
-
 readUsers();
 
 // ==================== FUNCIONES DE LECTURA ====================
@@ -361,8 +363,6 @@ function modifyUser() {
 	document
 		.getElementsByTagName("button")[0]
 		.addEventListener("click", updateUser);
-
-	document.getElementById("search").value = "";
 }
 
 /**
@@ -460,7 +460,7 @@ function searchUser(input) {
 		dniPattern.test(input) === true
 			? users.find((user) => user.dni === input.toUpperCase())
 			: users.filter((user) =>
-					user.name.toLocaleUpperCase().includes(input.toLocaleUpperCase()),
+					user.surname.toLocaleUpperCase().includes(input.toLocaleUpperCase()),
 				);
 	if (user === undefined || user.length === 0) {
 		return undefined;

@@ -143,7 +143,6 @@ document.addEventListener("keydown", (event) => {
 const info = document.createElement("dialog");
 
 // Mostrar todos los usuarios al cargar la página
-
 readUsers();
 
 // ==================== FUNCIONES DE LECTURA ====================
