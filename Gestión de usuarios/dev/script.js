@@ -181,11 +181,12 @@ function readUsers() {
  */
 function readUser() {
 	const input = document.getElementById("search").value;
-	if (checkInput(input) === undefined) {
+	const inputResult = checkInput(input);
+	if (inputResult === undefined) {
 		return;
 	}
 	const user = searchUser(input);
-	if (checkInput(input) === false || user === undefined) {
+	if (inputResult === false || user === undefined) {
 		notifications(undefined, input);
 		return;
 	}
@@ -454,11 +455,6 @@ function checkInput(input) {
  * @returns {User|undefined} Usuario encontrado o undefined si no existe
  */
 function searchUser(input) {
-	/*
-	 * let resultado = clientes.filter((clientes) =>
-	 *  clientes.nombre.toLowerCase().includes(nombreBusqueda.toLowerCase())
-	 * );
-	 */
 	const user =
 		dniPattern.test(input) === true
 			? users.find((user) => user.dni === input.toUpperCase())
