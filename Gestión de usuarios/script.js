@@ -2,7 +2,7 @@
  * @file script.js
  * @description Sistema CRUD para la gestión completa de usuarios con validación en tiempo real
  * @author Mario Morales Ortega
- * @version 1.3.0
+ * @version 1.2.3
  * @see {@link https://github.com/mariomo16/desarrollo-entorno-cliente-2025-2026/blob/main/Gesti%C3%B3n%20de%20usuarios}
  */
 
@@ -169,12 +169,8 @@ function readUser() {
 	const mainContent = document.getElementById("main-content");
 
 	const input = document.getElementById("search").value;
-	const user =
-		dniPattern.test(input) === true
-			? users.find((user) => user.dni === input.toUpperCase())
-			: users.find(
-					(user) => user.name.toLocaleUpperCase() === input.toLocaleUpperCase(),
-				);
+	const id = input.toUpperCase();
+	const user = users.find((user) => user.dni === id);
 	const userData = document.createElement("div");
 	userData.classList.add("user-info");
 	userData.innerHTML = `
@@ -321,14 +317,12 @@ function modifyUser() {
 	limpiarPantalla();
 	const panel = document.getElementById("main-content");
 
-	// Variable para leer el valor introducido y pasarlo a mayúsculas
+	// Variable para leer el valor introducido
 	const input = document.getElementById("search").value;
-	const user =
-		dniPattern.test(input) === true
-			? users.find((user) => user.dni === input.toUpperCase())
-			: users.find(
-					(user) => user.name.toLocaleUpperCase() === input.toLocaleUpperCase(),
-				);
+	// Convierto el valor introducido a mayúsculas
+	const id = input.toUpperCase();
+	// Busco algún (object) user dentro de (array) users con el campo DNI igual al introducido
+	const user = users.find((user) => user.dni === id);
 	// Creo el div donde se mostraran los datos del usuario
 	const userPanel = document.createElement("div");
 	userPanel.classList.add("user-info");
@@ -403,16 +397,13 @@ function deleteUser() {
 	limpiarPantalla();
 
 	const input = document.getElementById("search").value;
+	const dni = input.toUpperCase();
 	const userForDelete = (user) =>
-		(user === dniPattern.test(input)) === true
-			? users.find((user) => user.dni === input.toUpperCase())
-			: users.find(
-					(user) => user.name.toLocaleUpperCase() === input.toLocaleUpperCase(),
-				);
+		user === users.find((user) => user.dni === dni);
 	users.splice(users.findIndex(userForDelete), 1);
 	document.getElementById("search").value = "";
 	info.innerHTML = `
-        <p id="deleted">Usuario eliminado con éxito.</br> Usuario eliminado: <strong>${input}</strong></p>
+        <p id="deleted">Usuario eliminado con éxito.</br> DNI/NIE eliminado: <strong>${dni}</strong></p>
         <span>Pulse ESC para cerrar</span>
     `;
 	document.getElementsByTagName("body")[0].appendChild(info);
@@ -430,19 +421,12 @@ function deleteUser() {
  */
 function checkInput() {
 	const input = document.getElementById("search").value;
-	if (
-		input === "" ||
-		(dniPattern.test(input) !== true && namePattern.test(input) !== true)
-	) {
+	const dni = input.toUpperCase();
+	if (input === "" || dniPattern.test(input) !== true) {
 		document.getElementById("search").style.borderColor = INVALID_COLOR;
 		return false;
 	} else document.getElementById("search").style.borderColor = "#e2e5ea";
-	const user =
-		dniPattern.test(input) === true
-			? users.find((user) => user.dni === input.toUpperCase())
-			: users.find(
-					(user) => user.name.toLocaleUpperCase() === input.toLocaleUpperCase(),
-				);
+	const user = users.find((user) => user.dni === dni);
 	if (user === undefined) {
 		info.innerHTML = `
             <p id="notfound">No se ha encontrado ningún usuario.</br> DNI/NIE introducido: <strong>${dni}</strong></p>

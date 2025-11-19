@@ -2,7 +2,7 @@
  * @file script.js
  * @description Sistema CRUD para la gestión completa de usuarios con validación en tiempo real
  * @author Mario Morales Ortega
- * @version 1.3.0
+ * @version dev
  * @see {@link https://github.com/mariomo16/desarrollo-entorno-cliente-2025-2026/blob/main/Gesti%C3%B3n%20de%20usuarios}
  */
 
@@ -15,7 +15,7 @@
  */
 
 /**
- * Array que almacena todos los usuarios del sistema
+ * Array que almacena todos los usuarios
  * @type {User[]}
  */
 const users = [
@@ -76,7 +76,7 @@ const users = [
 ];
 
 /**
- * Expresión regular para validar DNI español o NIE
+ * Expresión regular para validar DNI o NIE
  * Formato: [XYZ]?[0-7][0-9]{6,7}[LETRA]
  * @type {RegExp}
  * @constant
@@ -106,7 +106,7 @@ const datePattern = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
 const VALID_COLOR = "var(--text)";
 
 /**
- * Color CSS para campos inválidos (rojo)
+ * Color CSS para campos inválidos
  * @type {string}
  * @constant
  */
@@ -124,52 +124,74 @@ document.getElementById("updateUser").addEventListener("click", modifyUser);
 document.getElementById("deleteUser").addEventListener("click", deleteUser);
 
 /**
+ * Event listener global para mostrar todos los usuarios con la tecla Escape
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent}
+ */
+document.addEventListener("keydown", (event) => {
+	if (event.key === "Escape") {
+		readUsers();
+	}
+});
+
+/**
  * Elemento dialog para mostrar mensajes modales al usuario
  * @type {HTMLDialogElement}
  */
 const info = document.createElement("dialog");
 
 // Mostrar todos los usuarios al cargar la página
+
 readUsers();
 
 // ==================== FUNCIONES DE LECTURA ====================
 
 /**
  * Muestra todos los usuarios almacenados en el sistema
- * Limpia la pantalla y renderiza cada usuario en un div independiente
+ * Solo renderiza si no están ya mostrados (evita volver a generar)
+ * Restablece el color del borde del input de búsqueda si está resaltado
  * @returns {void}
  */
 function readUsers() {
-	clear();
-	const mainContent = document.getElementById("main-content");
-	users.forEach((user) => {
-		const userData = document.createElement("div");
-		userData.classList.add("user-info");
-		userData.innerHTML += `
-            <p>DNI / NIE: <strong>${user.dni}</strong></p>
-            <p>Nombre: <strong>${user.name}</strong></p>
-            <p>Apellidos: <strong>${user.surname}</strong></p>
-            <p>Fecha de nacimiento: <strong>${user.birthdate}</strong></p>
-        `;
-		mainContent.appendChild(userData);
-		document.getElementById("search").focus();
-	});
+	if (document.getElementById("search").style.borderColor !== "#e2e5ea") {
+		document.getElementById("search").style.borderColor = "#e2e5ea";
+	}
+	if (document.getElementsByClassName("user-info").length === 0) {
+		clear();
+		const mainContent = document.getElementById("main-content");
+		users.forEach((user) => {
+			const userData = document.createElement("div");
+			userData.classList.add("user-info");
+			userData.innerHTML += `
+                <p>DNI / NIE: <strong>${user.dni}</strong></p>
+                <p>Nombre: <strong>${user.name}</strong></p>
+                <p>Apellidos: <strong>${user.surname}</strong></p>
+                <p>Fecha de nacimiento: <strong>${user.birthdate}</strong></p>
+            `;
+			mainContent.appendChild(userData);
+		});
+	}
+	document.getElementById("search").focus();
 }
 
 /**
  * Busca y muestra un usuario específico por su DNI/NIE
- * Valida la entrada antes de realizar la búsqueda
+ * Valida el input antes de realizar la búsqueda
+ * Muestra notificación si el usuario no existe
  * @returns {void}
  */
 function readUser() {
 	const input = document.getElementById("search").value;
-	if (checkInput(input) === false) {
+	if (checkInput(input) === undefined) {
+		return;
+	}
+	const user = searchUser(input);
+	if (checkInput(input) === false || user === undefined) {
+		notifications(undefined, input);
 		return;
 	}
 	clear();
-	const mainContent = document.getElementById("main-content");
 
-	const user = searchUser(input);
+	const mainContent = document.getElementById("main-content");
 	const userData = document.createElement("div");
 	userData.classList.add("user-info");
 	userData.innerHTML = `
@@ -180,7 +202,6 @@ function readUser() {
     `;
 	mainContent.appendChild(userData);
 	// Limpiar el input
-	document.getElementById("search").value = "";
 	document.getElementById("search").focus();
 }
 
@@ -188,24 +209,25 @@ function readUser() {
 
 /**
  * Valida los datos del formulario y crea un nuevo usuario
- * Comprueba que todos los campos cumplan con las expresiones regulares
- * y que el DNI/NIE no esté duplicado
+ * Verifica que todos los campos cumplan con las expresiones regulares,
+ * que el DNI/NIE no esté duplicado y convierte la fecha de ISO a formato DD/MM/YYYY
+ * Muestra notificación de éxito tras la creación
  * @returns {void}
  */
 function newUser() {
-	const idInput = document.getElementById("dni").value;
-	const nameInput = document.getElementById("name").value;
-	const surnameInput = document.getElementById("surname").value;
-	const birthdateInput = document.getElementById("birthdate").value;
+	const idInput = document.getElementById("dni");
+	const nameInput = document.getElementById("name");
+	const surnameInput = document.getElementById("surname");
+	const birthdateInput = document.getElementById("birthdate");
 
-	const id = idInput.toUpperCase();
-	const user = searchUser(idInput);
+	const id = idInput.value.toUpperCase();
+	const user = searchUser(id);
 
 	if (
 		dniPattern.test(id) &&
-		namePattern.test(nameInput) &&
-		namePattern.test(surnameInput) &&
-		datePattern.test(birthdateInput) === true &&
+		namePattern.test(nameInput.value) &&
+		namePattern.test(surnameInput.value) &&
+		datePattern.test(birthdateInput.value) === true &&
 		user === undefined
 	) {
 		const splittedDate = birthdateInput.split("-");
@@ -213,71 +235,72 @@ function newUser() {
 		// Creo un objeto con los datos recibidos
 		const userData = {
 			dni: id,
-			name: nameInput,
-			surname: surnameInput,
+			name: nameInput.value,
+			surname: surnameInput.value,
 			birthdate: birthdate,
 		};
 		createUser(userData);
+		notifications("create", "", userData);
+		info.close();
+		info.showModal();
 		return;
 	}
-	document.getElementsByTagName("label")[0].classList.add("invalid");
-	document.getElementById("dni").focus();
 }
 
 /**
- * Crea un nuevo usuario y lo añade al array de usuarios
- * Muestra un mensaje de confirmación mediante un dialog modal
- * @param {string} dni - DNI o NIE del usuario
- * @param {string} name - Nombre del usuario
- * @param {string} surname - Apellidos del usuario
- * @param {string} birthdate - Fecha de nacimiento en formato DD/MM/YYYY
+ * Añade un nuevo usuario al array de usuarios
+ * @param {User} user - Objeto usuario con todos sus datos
  * @returns {void}
  */
 function createUser(user) {
 	// Meto el objeto al array de usuarios
 	users.push(user);
-	notifications("create");
-	document.getElementsByTagName("body")[0].appendChild(info);
-	clear();
-	info.close();
-	info.showModal();
 }
 
 /**
  * Genera y muestra el formulario HTML para crear nuevos usuarios
+ * Solo crea el formulario si no existe previamente
+ * Restablece el color del borde del input de búsqueda si está resaltado
  * Configura los event listeners necesarios para la validación en tiempo real
  * @returns {void}
  */
 function createForm() {
-	clear();
-	const panel = document.getElementById("main-content");
-	const createForm = document.createElement("form");
-	createForm.innerHTML = `
-        <label for="dni">DNI / NIE</label>
-        <input type="text" name="dni" id="dni" required />
-
-        <label for="name">Nombre</label>
-        <input type="text" name="name" id="name" autocomplete="given-name" required />
-
-        <label for="surname">Apellidos</label>
-        <input type="text" name="surname" id="surname" autocomplete="family-name" required />
-
-        <label for="birthdate">Fecha de nacimiento</label>
-        <input type="date" name="birthdate" id="birthdate" required />
-
-        <button type="button" id="newUser">
-            Crear usuario
-        </button>
-    `;
-	panel.appendChild(createForm);
-	// Les pongo los eventos
-	addEvents();
+	if (document.getElementById("search").style.borderColor !== "#e2e5ea") {
+		document.getElementById("search").style.borderColor = "#e2e5ea";
+	}
+	if (!document.getElementById("userForm")) {
+		clear();
+		const panel = document.getElementById("main-content");
+		const userForm = document.createElement("form");
+		userForm.setAttribute("id", "userForm");
+		userForm.innerHTML = `
+            <label for="dni">DNI / NIE</label>
+            <input type="text" name="dni" id="dni" required />
+    
+            <label for="name">Nombre</label>
+            <input type="text" name="name" id="name" autocomplete="given-name" required />
+    
+            <label for="surname">Apellidos</label>
+            <input type="text" name="surname" id="surname" autocomplete="family-name" required />
+    
+            <label for="birthdate">Fecha de nacimiento</label>
+            <input type="date" name="birthdate" id="birthdate" required />
+    
+            <button type="button" id="newUser">
+                Crear usuario
+            </button>
+        `;
+		panel.appendChild(userForm);
+		// Les pongo los eventos
+		addEvents();
+	}
 	document.getElementById("dni").focus();
 }
 
 /**
  * Añade event listeners al formulario de creación de usuarios
  * Valida cada campo en tiempo real cambiando el color del texto según su validez
+ * Utiliza un Map para asociar cada campo con su expresión regular correspondiente
  * @returns {void}
  */
 function addEvents() {
@@ -303,20 +326,24 @@ function addEvents() {
 
 /**
  * Muestra el formulario de edición para un usuario específico
+ * Valida el DNI/NIE del input de búsqueda antes de proceder
  * Permite editar nombre y apellidos mediante campos contenteditable
+ * Limpia el input de búsqueda tras mostrar el formulario
  * @returns {void}
  */
 function modifyUser() {
 	const input = document.getElementById("search").value;
-	if (checkInput(input) === false) {
+	if (checkInput(input) === undefined) {
+		return;
+	}
+	const user = searchUser(input);
+	if (!dniPattern.test(input) || user === undefined) {
+		notifications(undefined, input);
 		return;
 	}
 	clear();
-	const panel = document.getElementById("main-content");
 
-	// Variable para leer el valor introducido y pasarlo a mayúsculas
-	const user = searchUser(input);
-	// Creo el div donde se mostraran los datos del usuario
+	const panel = document.getElementById("main-content");
 	const userPanel = document.createElement("div");
 	userPanel.classList.add("user-info");
 	userPanel.innerHTML = `
@@ -327,19 +354,18 @@ function modifyUser() {
         <button type="button" id="updateUser">Actualizar usuario</button>
     `;
 	panel.appendChild(userPanel);
-	// Añadir event listener al botón de actualización
 	document
 		.getElementsByTagName("button")[0]
 		.addEventListener("click", updateUser);
 
-	// Limpiar el input
 	document.getElementById("search").value = "";
 }
 
 /**
  * Actualiza los datos modificados de un usuario
  * Valida nombre y apellidos antes de guardar los cambios
- * Muestra feedback visual en caso de datos inválidos
+ * Muestra feedback visual (borde rojo) en caso de datos inválidos
+ * Si los datos son válidos, actualiza el usuario y muestra notificación de éxito
  * @returns {void}
  */
 function updateUser() {
@@ -354,6 +380,7 @@ function updateUser() {
 		user.surname = userSurname;
 		notifications("update", "", user);
 	} else {
+		// Validación visual: cambia el color del borde según la validez del campo
 		document.getElementsByTagName("p")[5].style.borderColor = namePattern.test(
 			userName,
 		)
@@ -371,41 +398,58 @@ function updateUser() {
 
 /**
  * Elimina un usuario del sistema por su DNI/NIE
- * Valida la entrada y muestra confirmación tras la eliminación
+ * Valida el input antes de proceder con la eliminación
+ * Busca el índice del usuario en el array y lo elimina con splice
+ * Muestra notificación de confirmación tras la eliminación
  * @returns {void}
  */
 function deleteUser() {
 	const input = document.getElementById("search").value;
-	if (checkInput(input) === false) {
+	if (checkInput(input) === undefined) {
 		return;
 	}
-
-	const userForDelete = (user) =>
-		(user === dniPattern.test(input)) === true
-			? users.find((user) => user.dni === input.toUpperCase())
-			: users.find(
-					(user) => user.name.toLocaleUpperCase() === input.toLocaleUpperCase(),
-				);
-	users.splice(users.findIndex(userForDelete), 1);
-	notifications("delete", input);
-	clear();
+	const user = searchUser(input);
+	if (!dniPattern.test(input) || user === undefined) {
+		notifications(undefined, input);
+		return;
+	}
+	users.splice(
+		users.findIndex((user) => user.dni === input),
+		1,
+	);
+	notifications("delete", input, user);
 }
 
 // ==================== FUNCIONES AUXILIARES ====================
 
+/**
+ * Valida el contenido del input de búsqueda
+ * Cambia el color del borde según el estado de validación
+ * @param {string} input - Valor del input a validar
+ * @returns {undefined|boolean} undefined si está vacío, true si es válido, false si es inválido
+ */
 function checkInput(input) {
-	if (
-		input !== "" &&
-		(dniPattern.test(input) === true || namePattern.test(input) === true)
-	) {
+	if (input === "") {
+		document.getElementById("search").style.borderColor = INVALID_COLOR;
+		document.getElementById("search").focus();
+		return undefined;
+	}
+	if (dniPattern.test(input) === true || namePattern.test(input) === true) {
 		document.getElementById("search").style.borderColor = "#e2e5ea";
 		return true;
 	} else {
 		document.getElementById("search").style.borderColor = INVALID_COLOR;
+		document.getElementById("search").focus();
 		return false;
 	}
 }
 
+/**
+ * Busca un usuario por DNI/NIE o nombre
+ * La búsqueda es case-insensitive
+ * @param {string} input - DNI/NIE o nombre a buscar
+ * @returns {User|undefined} Usuario encontrado o undefined si no existe
+ */
 function searchUser(input) {
 	const user =
 		dniPattern.test(input) === true
@@ -416,18 +460,30 @@ function searchUser(input) {
 	if (user !== undefined) {
 		return user;
 	} else {
-		notifications(undefined, input);
 		return undefined;
 	}
 }
 
+/**
+ * Muestra notificaciones modales según el resultado de la operación
+ * Utiliza un elemento dialog para mostrar información sobre creación,
+ * actualización, eliminación o usuario no encontrado
+ * @param {string|undefined} result - Tipo de operación: "create", "update", "delete", o undefined para error
+ * @param {string} input - Valor de búsqueda (usado en caso de error)
+ * @param {User} user - Datos del usuario afectado por la operación
+ * @returns {void}
+ */
 function notifications(result, input, user) {
 	switch (result) {
 		case "create":
 			info.innerHTML = `
-                <p id="created">Usuario creado con éxito.</br> DNI/NIE creado: <strong>${user.dni}</strong></p>
-                <span>Pulse ESC para cerrar</span>
-            `;
+                    <h3>Usuario creado</h3>
+                    <p>DNI / NIE: <strong>${user.dni}</strong></p>
+                    <p>Nombre: <strong>${user.name}</strong></p>
+                    <p>Apellidos: <strong>${user.surname}</strong></p>
+                    <p>Fecha de nacimiento: <strong>${user.birthdate}</strong></p>
+                    <span>Pulse ESC para cerrar</span>
+                `;
 			break;
 		case "update":
 			info.innerHTML = `
@@ -441,26 +497,30 @@ function notifications(result, input, user) {
 			break;
 		case undefined:
 			info.innerHTML = `
-                <p id="notfound">No se ha encontrado ningún usuario.</br> Datos introducidos: <strong>${input}</strong></p>
+                <p id="notfound">No se encontraron resultados para: <strong>${input}</strong></p>
                 <span>Pulse ESC para cerrar</span>
             `;
 			break;
 
 		case "delete":
 			info.innerHTML = `
-                <p id="deleted">Usuario eliminado con éxito.</br> Usuario eliminado: <strong>${input.toLocaleUpperCase()}</strong></p>
+                <p id="deleted">Usuario eliminado con éxito: <strong>${user.dni}</strong></p>
                 <span>Pulse ESC para cerrar</span>
             `;
 			break;
-		default:
-			break;
 	}
-	document.getElementsByTagName("body")[0].appendChild(info);
 	clear();
+	document.getElementsByTagName("body")[0].appendChild(info);
+	info.style.outline = "none";
 	info.close();
 	info.showModal();
 }
 
+/**
+ * Limpia el contenedor principal eliminando todos los elementos hijos
+ * También resetea el valor y el color del borde del input de búsqueda
+ * @returns {void}
+ */
 function clear() {
 	const main = document.getElementById("main-content").children;
 	const mainLength = main.length;
