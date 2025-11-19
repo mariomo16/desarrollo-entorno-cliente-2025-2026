@@ -174,9 +174,9 @@ function readUsers() {
 }
 
 /**
- * Busca y muestra un usuario específico por su DNI/NIE
- * Valida el input antes de realizar la búsqueda
- * Muestra notificación si el usuario no existe
+ * Muestra un usuario o usuarios específicos por su DNI/NIE o nombre
+ * Si se introduce un nombre parcial, puede devolver varios resultados
+ * Valida el input antes de realizar la búsqueda y muestra notificación si no existe
  * @returns {void}
  */
 function readUser() {
@@ -449,10 +449,10 @@ function checkInput(input) {
 }
 
 /**
- * Busca un usuario por DNI/NIE o nombre
+ * Busca un usuario por DNI/NIE o filtra usuarios por nombre parcial
  * La búsqueda es case-insensitive
  * @param {string} input - DNI/NIE o nombre a buscar
- * @returns {User|undefined} Usuario encontrado o undefined si no existe
+ * @returns {User|User[]|undefined} Usuario encontrado, array de usuarios si hay coincidencias por nombre, o undefined si no existe
  * @see {@link https://github.com/mariomo16/desarrollo-entorno-cliente-2023-2024/blob/main/U.T.%206./CRUD%20de%20clientes/crudClientesV2.js#L107}
  */
 function searchUser(input) {
