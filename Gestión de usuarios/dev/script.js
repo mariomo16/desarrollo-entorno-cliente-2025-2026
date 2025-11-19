@@ -364,8 +364,6 @@ function modifyUser() {
 	document
 		.getElementsByTagName("button")[0]
 		.addEventListener("click", updateUser);
-
-	document.getElementById("search").value = "";
 }
 
 /**
