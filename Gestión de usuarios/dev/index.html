@@ -9,17 +9,23 @@
     </head>
     <body>
         <nav>
-            <input
-                type="text"
-                placeholder="DNI / NIE del usuario"
-                id="search"
-            />
+            <input type="text" placeholder="Buscar usuario" id="search" />
             <div class="nav-menu">
                 <p id="createUser">Crear usuario</p>
                 <p id="readUsers">Mostrar usuarios</p>
-                <p id="readUser">Buscar usuario</p>
-                <p id="updateUser">Modificar usuario</p>
-                <p id="deleteUser">Eliminar usuario</p>
+                <p id="readUser">
+                    Buscar usuario<span class="btnInfo">DNI, NIE o nombre</span>
+                </p>
+                <p id="updateUser">
+                    Modificar usuario<span class="btnInfo"
+                        >Solo con DNI o NIE</span
+                    >
+                </p>
+                <p id="deleteUser">
+                    Eliminar usuario<span class="btnInfo"
+                        >Solo con DNI o NIE</span
+                    >
+                </p>
             </div>
         </nav>
         <main id="main-content"></main>

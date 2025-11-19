@@ -78,8 +78,9 @@ nav input[type="text"] {
 	transition:
 		border-color 0.12s ease,
 		box-shadow 0.12s ease;
-	min-width: 180px;
-	max-width: 200px;
+	min-width: 233px;
+	max-width: 250px;
+	field-sizing: content;
 }
 
 /*
@@ -91,7 +92,7 @@ nav input[type="text"]:focus {
 }
 
 /*
-	Contenedor del menú de navegación (elementos clicables).
+	Contenedor del menú de navegación (elementos clickables).
 */
 .nav-menu {
 	display: flex;
@@ -105,12 +106,18 @@ nav input[type="text"]:focus {
 nav p {
 	padding: 18px 20px;
 	margin: 0;
-	font-size: 0.95rem;
+	font-size: 1.1rem;
 	font-weight: 500;
 	color: var(--muted);
 	cursor: pointer;
 	transition: all 0.12s ease;
 	border-bottom: 3px solid transparent;
+	text-align: center;
+	height: 60px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	box-sizing: border-box;
 }
 
 /*
@@ -393,33 +400,27 @@ dialog p strong {
 	Mensaje de confirmación de creación.
 */
 dialog p#created {
-	background: #f7f9fb;
 	border: 0px;
 	color: var(--accent);
 	font-weight: 500;
-	padding: 14px 16px;
 }
 
 /*
 	Mensaje de confirmación de eliminación.
 */
 dialog p#deleted {
-	background: #f7f9fb;
 	border: 0px;
 	color: var(--accent);
 	font-weight: 500;
-	padding: 14px 16px;
 }
 
 /*
 	Mensaje de error cuando no se encuentra el usuario.
 */
 dialog p#notfound {
-	background: #f7f9fb;
 	border: 0px;
 	color: #991b1b;
 	font-weight: 500;
-	padding: 14px 16px;
 }
 
 /*
@@ -428,17 +429,13 @@ dialog p#notfound {
 dialog p#notfound strong {
 	color: #7f1d1d;
 	background: #fca5a5;
-	padding: 2px 6px;
+	padding: 0px 6px 2px 6px;
 	border-radius: 4px;
 }
 
-/*
-	Aviso de validación: DNI/NIE duplicado mostrado junto a la etiqueta.
-*/
-.invalid::after {
-	content: "error";
-	color: #ef5350;
-	display: flex;
-	float: right;
-	font-size: 0.9em;
+nav p .btnInfo {
+	display: block;
+	font-size: 0.8rem;
+	color: #666;
+	margin-top: 2px;
 }
