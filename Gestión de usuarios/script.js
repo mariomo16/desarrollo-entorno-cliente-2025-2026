@@ -2,7 +2,7 @@
  * @file script.js
  * @description Sistema CRUD para la gestión completa de usuarios con validación en tiempo real
  * @author Mario Morales Ortega
- * @version 1.2.2
+ * @version 1.3.0
  * @see {@link https://github.com/mariomo16/desarrollo-entorno-cliente-2025-2026/blob/main/Gesti%C3%B3n%20de%20usuarios}
  */
 
@@ -169,8 +169,12 @@ function readUser() {
 	const mainContent = document.getElementById("main-content");
 
 	const input = document.getElementById("search").value;
-	const id = input.toUpperCase();
-	const user = users.find((user) => user.dni === id);
+	const user =
+		dniPattern.test(input) === true
+			? users.find((user) => user.dni === input.toUpperCase())
+			: users.find(
+					(user) => user.name.toLocaleUpperCase() === input.toLocaleUpperCase(),
+				);
 	const userData = document.createElement("div");
 	userData.classList.add("user-info");
 	userData.innerHTML = `
@@ -203,7 +207,7 @@ function newUser() {
 	const user = users.find((user) => user.dni === id);
 
 	if (
-		dniPattern.test(idInput) &&
+		dniPattern.test(id) &&
 		namePattern.test(nameInput) &&
 		namePattern.test(surnameInput) &&
 		datePattern.test(birthdateInput) === true &&
@@ -213,7 +217,7 @@ function newUser() {
 		const birthdate = `${splittedDate[2]}/${splittedDate[1]}/${splittedDate[0]}`;
 		// Creo un objeto con los datos recibidos
 		const userData = {
-			dni: idInput,
+			dni: id,
 			name: nameInput,
 			surname: surnameInput,
 			birthdate: birthdate,
@@ -317,12 +321,14 @@ function modifyUser() {
 	limpiarPantalla();
 	const panel = document.getElementById("main-content");
 
-	// Variable para leer el valor introducido
+	// Variable para leer el valor introducido y pasarlo a mayúsculas
 	const input = document.getElementById("search").value;
-	// Convierto el valor introducido a mayúsculas
-	const id = input.toUpperCase();
-	// Busco algún (object) user dentro de (array) users con el campo DNI igual al introducido
-	const user = users.find((user) => user.dni === id);
+	const user =
+		dniPattern.test(input) === true
+			? users.find((user) => user.dni === input.toUpperCase())
+			: users.find(
+					(user) => user.name.toLocaleUpperCase() === input.toLocaleUpperCase(),
+				);
 	// Creo el div donde se mostraran los datos del usuario
 	const userPanel = document.createElement("div");
 	userPanel.classList.add("user-info");
@@ -397,13 +403,16 @@ function deleteUser() {
 	limpiarPantalla();
 
 	const input = document.getElementById("search").value;
-	const dni = input.toUpperCase();
 	const userForDelete = (user) =>
-		user === users.find((user) => user.dni === dni);
+		(user === dniPattern.test(input)) === true
+			? users.find((user) => user.dni === input.toUpperCase())
+			: users.find(
+					(user) => user.name.toLocaleUpperCase() === input.toLocaleUpperCase(),
+				);
 	users.splice(users.findIndex(userForDelete), 1);
 	document.getElementById("search").value = "";
 	info.innerHTML = `
-        <p id="deleted">Usuario eliminado con éxito.</br> DNI/NIE eliminado: <strong>${dni}</strong></p>
+        <p id="deleted">Usuario eliminado con éxito.</br> Usuario eliminado: <strong>${input}</strong></p>
         <span>Pulse ESC para cerrar</span>
     `;
 	document.getElementsByTagName("body")[0].appendChild(info);
@@ -421,12 +430,19 @@ function deleteUser() {
  */
 function checkInput() {
 	const input = document.getElementById("search").value;
-	const dni = input.toUpperCase();
-	if (input === "" || dniPattern.test(input) !== true) {
+	if (
+		input === "" ||
+		(dniPattern.test(input) !== true && namePattern.test(input) !== true)
+	) {
 		document.getElementById("search").style.borderColor = INVALID_COLOR;
 		return false;
 	} else document.getElementById("search").style.borderColor = "#e2e5ea";
-	const user = users.find((user) => user.dni === dni);
+	const user =
+		dniPattern.test(input) === true
+			? users.find((user) => user.dni === input.toUpperCase())
+			: users.find(
+					(user) => user.name.toLocaleUpperCase() === input.toLocaleUpperCase(),
+				);
 	if (user === undefined) {
 		info.innerHTML = `
             <p id="notfound">No se ha encontrado ningún usuario.</br> DNI/NIE introducido: <strong>${dni}</strong></p>

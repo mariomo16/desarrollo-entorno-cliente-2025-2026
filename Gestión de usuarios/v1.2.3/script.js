@@ -199,7 +199,7 @@ function newUser() {
 	const surnameInput = document.getElementById("surname").value;
 	const birthdateInput = document.getElementById("birthdate").value;
 
-  const id = idInput.toUpperCase();
+	const id = idInput.toUpperCase();
 	const user = users.find((user) => user.dni === id);
 
 	if (
