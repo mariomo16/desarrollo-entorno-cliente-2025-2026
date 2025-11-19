@@ -2,9 +2,14 @@
  * @file script.js
  * @description Sistema CRUD para la gestión completa de usuarios con validación en tiempo real
  * @author Mario Morales Ortega
- * @version dev
- * @see {@link https://github.com/mariomo16/desarrollo-entorno-cliente-2025-2026/blob/main/Gesti%C3%B3n%20de%20usuarios/dev}
+ * @version 1.3.2
+ * @see {@link https://github.com/mariomo16/desarrollo-entorno-cliente-2025-2026/blob/main/Gesti%C3%B3n%20de%20usuarios}
  */
+
+/* 
+TODO
+    - readUsers() y readUser() muestran los usuarios ordenados por orden alfabético (apellidos)
+*/
 
 /**
  * @typedef {Object} User
@@ -16,64 +21,11 @@
 
 /**
  * Array que almacena todos los usuarios
+ * Los datos se persisten en localStorage para mantenerlos entre sesiones
  * @type {User[]}
+ * @see {@link https://stackoverflow.com/questions/43762363/how-to-store-an-array-of-objects-in-local-storage}
  */
-const users = [
-	{
-		dni: "12345678Z",
-		name: "Ana",
-		surname: "García López",
-		birthdate: "15/03/1995",
-	},
-	{
-		dni: "87654321M",
-		name: "Luis",
-		surname: "Pérez Gómez",
-		birthdate: "02/11/1988",
-	},
-	{
-		dni: "11223344A",
-		name: "María",
-		surname: "Sánchez Ruiz",
-		birthdate: "25/07/1992",
-	},
-	{
-		dni: "99887766H",
-		name: "Carlos",
-		surname: "Fernández Díaz",
-		birthdate: "09/01/1985",
-	},
-	{
-		dni: "X1234567T",
-		name: "Laura",
-		surname: "Martín Ortega",
-		birthdate: "30/06/2000",
-	},
-	{
-		dni: "Y7654321K",
-		name: "Javier",
-		surname: "Romero Navarro",
-		birthdate: "12/12/1998",
-	},
-	{
-		dni: "13579246P",
-		name: "Elena",
-		surname: "Torres Castro",
-		birthdate: "05/05/1993",
-	},
-	{
-		dni: "24681357L",
-		name: "Sergio",
-		surname: "Alonso Molina",
-		birthdate: "21/09/1990",
-	},
-	{
-		dni: "Z1029384Q",
-		name: "Patricia",
-		surname: "Núñez Cabrera",
-		birthdate: "17/04/1997",
-	},
-];
+const users = JSON.parse(localStorage.getItem("users")) || [];
 
 /**
  * Expresión regular para validar DNI o NIE
@@ -148,7 +100,7 @@ readUsers();
 // ==================== FUNCIONES DE LECTURA ====================
 
 /**
- * Muestra todos los usuarios almacenados en el sistema
+ * Muestra todos los usuarios almacenados en el sistema ordenados alfabéticamente por apellidos
  * Solo renderiza si no están ya mostrados (evita volver a generar)
  * Restablece el color del borde del input de búsqueda si está resaltado
  * @returns {void}
@@ -176,8 +128,8 @@ function readUsers() {
 }
 
 /**
- * Muestra un usuario o usuarios específicos por su DNI/NIE o nombre
- * Si se introduce un nombre parcial, puede devolver varios resultados
+ * Muestra un usuario o usuarios específicos por su DNI/NIE o apellidos
+ * Si se introduce un apellido parcial, puede devolver varios resultados ordenados alfabéticamente
  * Valida el input antes de realizar la búsqueda y muestra notificación si no existe
  * @returns {void}
  */
@@ -246,6 +198,8 @@ function newUser() {
 			birthdate: birthdate,
 		};
 		createUser(userData);
+        // Persisto los cambios en localStorage
+        localStorage.setItem("users", JSON.stringify(users));
 		notifications("create", "", userData);
 		info.close();
 		info.showModal();
@@ -259,7 +213,6 @@ function newUser() {
  * @returns {void}
  */
 function createUser(user) {
-	// Meto el objeto al array de usuarios
 	users.push(user);
 }
 
@@ -297,7 +250,6 @@ function createForm() {
             </button>
         `;
 		panel.appendChild(userForm);
-		// Les pongo los eventos
 		addEvents();
 	}
 	document.getElementById("dni").focus();
@@ -382,6 +334,8 @@ function updateUser() {
 		clear();
 		user.name = userName;
 		user.surname = userSurname;
+        // Persisto los cambios en localStorage
+        localStorage.setItem("users", JSON.stringify(users));
 		notifications("update", "", user);
 	} else {
 		// Validación visual: cambia el color del borde según la validez del campo
@@ -421,6 +375,8 @@ function deleteUser() {
 		users.findIndex((user) => user.dni === input),
 		1,
 	);
+    // Persisto los cambios en localStorage
+    localStorage.setItem("users", JSON.stringify(users));
 	notifications("delete", input, user);
 }
 
@@ -449,10 +405,10 @@ function checkInput(input) {
 }
 
 /**
- * Busca un usuario por DNI/NIE o filtra usuarios por nombre parcial
+ * Busca un usuario por DNI/NIE o filtra usuarios por apellidos parciales
  * La búsqueda es case-insensitive
- * @param {string} input - DNI/NIE o nombre a buscar
- * @returns {User|User[]|undefined} Usuario encontrado, array de usuarios si hay coincidencias por nombre, o undefined si no existe
+ * @param {string} input - DNI/NIE o apellidos a buscar
+ * @returns {User|User[]|undefined} Usuario encontrado, array de usuarios si hay coincidencias por apellidos, o undefined si no existe
  * @see {@link https://github.com/mariomo16/desarrollo-entorno-cliente-2023-2024/blob/main/U.T.%206./CRUD%20de%20clientes/crudClientesV2.js#L107}
  */
 function searchUser(input) {
