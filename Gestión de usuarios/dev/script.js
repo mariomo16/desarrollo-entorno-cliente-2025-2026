@@ -24,11 +24,10 @@ const url = "http://localhost:3000/usuarios";
  * @see {@link https://developer.mozilla.org/es/docs/Web/API/Fetch_API/Using_Fetch}
  */
 let users;
-(async () => {
+
+async function getUsers() {
 	users = await fetchServer();
-	// Mostrar todos los usuarios al cargar la página
-	readUsers();
-})();
+}
 
 async function fetchServer() {
 	return fetch(url, {
@@ -37,6 +36,26 @@ async function fetchServer() {
 			Accept: "application/json",
 		},
 	}).then((response) => response.json());
+}
+
+async function updateUsers(id, user) {
+	await fetch(`${url}/${id}`, {
+		method: "PUT",
+		body: JSON.stringify(user),
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
+}
+
+async function deleteFromUsers(id, user) {
+	await fetch(`${url}/${id}`, {
+		method: "DELETE",
+		body: JSON.stringify(user),
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
 }
 
 /**
@@ -106,6 +125,8 @@ document.addEventListener("keydown", (event) => {
  */
 const info = document.createElement("dialog");
 
+readUsers();
+
 // ==================== FUNCIONES DE LECTURA ====================
 
 /**
@@ -114,8 +135,9 @@ const info = document.createElement("dialog");
  * Restablece el color del borde del input de búsqueda si está resaltado
  * @returns {void}
  */
-function readUsers() {
-	// sortBySurname();
+async function readUsers() {
+	await getUsers();
+	sortBySurname();
 	if (document.getElementById("search").style.borderColor !== "#e2e5ea") {
 		document.getElementById("search").style.borderColor = "#e2e5ea";
 	}
@@ -228,15 +250,6 @@ function createUser(user) {
 			"Content-Type": "application/json",
 		},
 	});
-	/*
-    fetch(url, {
-		method: "PATCH",
-		body: JSON.stringify(users),
-		headers: {
-			"Content-Type": "application/json",
-		},
-	}).then((res) => res.json());
-     */
 }
 
 /**
@@ -357,8 +370,7 @@ function updateUser() {
 		clear();
 		user.name = userName;
 		user.surname = userSurname;
-		// Persisto los cambios en localStorage
-		localStorage.setItem("users", JSON.stringify(users));
+		updateUsers(user.id, user);
 		notifications("update", "", user);
 	} else {
 		// Validación visual: cambia el color del borde según la validez del campo
@@ -394,12 +406,7 @@ function deleteUser() {
 		notifications(undefined, input);
 		return;
 	}
-	users.splice(
-		users.findIndex((user) => user.dni === input),
-		1,
-	);
-	// Persisto los cambios en localStorage
-	localStorage.setItem("users", JSON.stringify(users));
+	deleteFromUsers(user.id, user);
 	notifications("delete", input, user);
 }
 
