@@ -1,0 +1,11 @@
+{
+  "usuarios": [
+    {
+      "id": "449c",
+      "dni": "24470848K",
+      "name": "Mario",
+      "surname": "Morales Ortega",
+      "birthdate": "03/10/2002"
+    }
+  ]
+}

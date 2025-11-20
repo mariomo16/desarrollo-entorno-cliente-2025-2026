@@ -6,6 +6,9 @@
  * @see {@link https://github.com/mariomo16/desarrollo-entorno-cliente-2025-2026/blob/main/Gesti%C3%B3n%20de%20usuarios/dev}
  */
 
+// https://desarrolloweb.com/articulos/crear-api-rest-json-server.html
+const url = "http://localhost:3000/usuarios";
+
 /**
  * @typedef {Object} User
  * @property {string} dni - DNI o NIE del usuario en formato mayúsculas
@@ -18,9 +21,23 @@
  * Array que almacena todos los usuarios
  * Los datos se persisten en localStorage para mantenerlos entre sesiones
  * @type {User[]}
- * @see {@link https://stackoverflow.com/questions/43762363/how-to-store-an-array-of-objects-in-local-storage}
+ * @see {@link https://developer.mozilla.org/es/docs/Web/API/Fetch_API/Using_Fetch}
  */
-const users = JSON.parse(localStorage.getItem("users")) || [];
+let users;
+(async () => {
+	users = await fetchServer();
+	// Mostrar todos los usuarios al cargar la página
+	readUsers();
+})();
+
+async function fetchServer() {
+	return fetch(url, {
+		method: "GET",
+		headers: {
+			Accept: "application/json",
+		},
+	}).then((response) => response.json());
+}
 
 /**
  * Expresión regular para validar DNI o NIE
@@ -89,9 +106,6 @@ document.addEventListener("keydown", (event) => {
  */
 const info = document.createElement("dialog");
 
-// Mostrar todos los usuarios al cargar la página
-readUsers();
-
 // ==================== FUNCIONES DE LECTURA ====================
 
 /**
@@ -101,7 +115,7 @@ readUsers();
  * @returns {void}
  */
 function readUsers() {
-	sortBySurname();
+	// sortBySurname();
 	if (document.getElementById("search").style.borderColor !== "#e2e5ea") {
 		document.getElementById("search").style.borderColor = "#e2e5ea";
 	}
@@ -194,8 +208,6 @@ function newUser() {
 			birthdate: birthdate,
 		};
 		createUser(userData);
-		// Persisto los cambios en localStorage
-		localStorage.setItem("users", JSON.stringify(users));
 		notifications("create", "", userData);
 		info.close();
 		info.showModal();
@@ -209,7 +221,22 @@ function newUser() {
  * @returns {void}
  */
 function createUser(user) {
-	users.push(user);
+	fetch(url, {
+		method: "POST",
+		body: JSON.stringify(user),
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
+	/*
+    fetch(url, {
+		method: "PATCH",
+		body: JSON.stringify(users),
+		headers: {
+			"Content-Type": "application/json",
+		},
+	}).then((res) => res.json());
+     */
 }
 
 /**
