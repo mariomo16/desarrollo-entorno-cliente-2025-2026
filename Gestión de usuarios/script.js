@@ -299,13 +299,7 @@ function updateUser() {
 
 // ==================== FUNCIONES DE ELIMINACIÓN ====================
 
-/**
- * Elimina un usuario del sistema por su DNI/NIE
- * Valida el input antes de proceder con la eliminación
- * Busca el índice del usuario en el array y lo elimina con splice
- * Muestra notificación de confirmación tras la eliminación
- * @returns {void}
- */
+// Elimina un usuario del sistema por su DNI/NIE
 function deleteUser() {
 	const input = document.getElementById("search").value;
 	if (checkInput(input) === undefined) {
