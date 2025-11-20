@@ -1,0 +1,425 @@
+/* ==================== VARIABLES Y CONFIGURACIÓN BASE ==================== */
+
+/*
+	Variables CSS personalizadas para tema coherente
+	- Paleta de colores (fondo, tarjetas, texto, acento)
+	- Dimensiones estándar (radio de bordes, sombras)
+	- Tipografía base del documento
+*/
+:root {
+	--bg: #f7f9fb;
+	--card: #ffffff;
+	--text: #1f2937;
+	--muted: #6b7280;
+	--accent: #5b8def;
+	--radius: 8px;
+	--shadow: 0 6px 18px rgba(31, 41, 55, 0.06);
+	font-family: Inter, system-ui, sans-serif;
+	/* Ocultar scrollbar manteniendo funcionalidad (IE y Edge) */
+	-ms-overflow-style: none;
+	/* Ocultar scrollbar manteniendo funcionalidad (Firefox) */
+	scrollbar-width: none;
+}
+
+/* Ocultar scrollbar manteniendo funcionalidad (Chrome, Safari y Opera) */
+:root::-webkit-scrollbar {
+	display: none;
+}
+
+/* ==================== RESET Y NORMALIZACIÓN ==================== */
+
+/*
+	Box-sizing consistente para todos los elementos
+	Evita problemas con padding y border en el cálculo de dimensiones
+*/
+* {
+	box-sizing: border-box;
+}
+
+/* ==================== LAYOUT PRINCIPAL ==================== */
+
+/*
+	Contenedor principal del documento
+	Layout flex vertical que ocupa toda la altura de la ventana
+*/
+body {
+	background: var(--bg);
+	color: var(--text);
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+/*
+	Área de contenido principal
+	Contenedor flexible con distribución en grid adaptable
+*/
+main {
+	flex: 1;
+	padding: 28px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: flex-start;
+	align-content: flex-start;
+	gap: 20px;
+}
+
+/* ==================== NAVEGACIÓN ==================== */
+
+/*
+	Barra de navegación superior fija con sombra
+	Permanece visible durante el scroll (sticky)
+*/
+nav {
+	width: 100%;
+	background: var(--card);
+	padding: 0 28px;
+	box-shadow: var(--shadow);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	position: sticky;
+	top: 0;
+	z-index: 100;
+}
+
+/*
+	Campo de búsqueda en la navegación
+	Ancho adaptable con límites mínimo y máximo
+*/
+nav input[type="text"] {
+	padding: 9px 12px;
+	border: 1px solid #e2e5ea;
+	border-radius: 6px;
+	font-size: 0.95rem;
+	font-weight: 500;
+	outline: none;
+	background: #fff;
+	color: var(--text);
+	transition:
+		border-color 0.12s ease,
+		box-shadow 0.12s ease;
+	min-width: 233px;
+	max-width: 250px;
+	field-sizing: content;
+}
+
+/* Estado focus del campo de búsqueda con realce visual */
+nav input[type="text"]:focus {
+	border-color: var(--accent);
+	box-shadow: 0 0 0 3px rgba(91, 141, 239, 0.15);
+}
+
+/* Contenedor de elementos del menú de navegación */
+.nav-menu {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+/*
+	Elementos de navegación interactivos
+	Comportamiento de pseudo-botones con indicador inferior
+*/
+nav p {
+	margin: 0;
+	padding: 18px 20px;
+	height: 60px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	font-size: 1.1rem;
+	font-weight: 500;
+	color: var(--muted);
+	text-align: center;
+	border-bottom: 3px solid transparent;
+	cursor: pointer;
+	transition: all 0.12s ease;
+	box-sizing: border-box;
+}
+
+/* Estado hover con subrayado y fondo sutil */
+nav p:hover {
+	color: var(--text);
+	border-bottom-color: var(--accent);
+	background: rgba(91, 141, 239, 0.04);
+}
+
+/* Estado activo del elemento de navegación */
+nav p.active {
+	color: var(--accent);
+	border-bottom-color: var(--accent);
+	font-weight: 600;
+}
+
+/* Texto informativo secundario en elementos de navegación */
+nav p .btnInfo {
+	display: block;
+	font-size: 0.8rem;
+	color: #666;
+	margin-top: 2px;
+}
+
+/* ==================== FORMULARIOS ==================== */
+
+/*
+	Tarjeta contenedora del formulario
+	Diseño vertical con espaciado consistente
+*/
+form {
+	width: 100%;
+	max-width: 400px;
+	background: var(--card);
+	padding: 20px 24px;
+	border-radius: var(--radius);
+	box-shadow: var(--shadow);
+	display: flex;
+	flex-direction: column;
+}
+
+/* Etiquetas de campos de formulario */
+label {
+	display: inline-block;
+	margin-bottom: 4px;
+	font-size: 0.95rem;
+	font-weight: 500;
+	color: var(--text);
+}
+
+/* Campos de entrada: texto y fecha */
+form input[type="text"],
+form input[type="date"] {
+	width: 100%;
+	padding: 9px 12px;
+	margin-bottom: 10px;
+	border: 1px solid #e2e5ea;
+	border-radius: 6px;
+	font-size: 1rem;
+	outline: none;
+	background: #fff;
+	color: var(--text);
+	transition:
+		border-color 0.12s ease,
+		box-shadow 0.12s ease;
+}
+
+/* Estado focus de campos con realce visual */
+form input[type="text"]:focus,
+form input[type="date"]:focus {
+	border-color: var(--accent);
+	box-shadow: 0 0 0 3px rgba(91, 141, 239, 0.15);
+}
+
+/* ==================== BOTONES ==================== */
+
+/*
+	Botón primario con elevación y efectos interactivos
+	Animaciones suaves en hover y click
+*/
+button {
+	padding: 10px 14px;
+	border: none;
+	border-radius: 8px;
+	background: var(--accent);
+	color: #fff;
+	font-size: 1rem;
+	font-weight: 600;
+	cursor: pointer;
+	box-shadow: 0 8px 20px rgba(91, 141, 239, 0.18);
+	transition:
+		transform 0.08s ease,
+		box-shadow 0.12s ease,
+		opacity 0.12s ease;
+}
+
+/* Elevación sutil al pasar el cursor */
+button:hover {
+	transform: translateY(-2px);
+}
+
+/* Rebote al hacer click */
+button:active {
+	transform: translateY(0);
+}
+
+/* ==================== TARJETAS DE USUARIO ==================== */
+
+/*
+	Tarjeta de información de usuario
+	Contenedor con sombra y espaciado generoso
+*/
+.user-info {
+	width: 100%;
+	max-width: 400px;
+	background: var(--card);
+	padding: 24px 28px;
+	border-radius: var(--radius);
+	box-shadow: var(--shadow);
+}
+
+/*
+	Filas de información dentro de la tarjeta
+	Incluye borde izquierdo de acento y fondo sutil
+*/
+.user-info p {
+	margin: 0 0 14px 0;
+	padding: 12px 14px;
+	background: #f7f9fb;
+	border-radius: 6px;
+	border-left: 3px solid var(--accent);
+	font-size: 1rem;
+	color: var(--text);
+	transition: all 0.12s ease;
+}
+
+/* Eliminar margen inferior del último elemento */
+.user-info p:last-child {
+	margin-bottom: 0;
+}
+
+/* Efecto hover sutil en filas de información */
+.user-info p:hover {
+	background: rgba(91, 141, 239, 0.08);
+}
+
+/*
+	Campos editables in-place (contenteditable)
+	Estilo distinguible con borde punteado
+*/
+.user-info p strong.editable {
+	display: inline-block;
+	min-width: 60px;
+	padding: 4px 8px;
+	background: #fff;
+	border: 1px dashed #e2e5ea;
+	border-radius: 4px;
+	cursor: text;
+	transition: all 0.12s ease;
+}
+
+/* Realce de borde al pasar el cursor */
+.user-info p strong.editable:hover {
+	border-color: var(--accent);
+	background: rgba(91, 141, 239, 0.05);
+}
+
+/* Estado focus con borde sólido y sombra */
+.user-info p strong.editable:focus {
+	outline: none;
+	border-style: solid;
+	border-color: var(--accent);
+	background: #fff;
+	box-shadow: 0 0 0 3px rgba(91, 141, 239, 0.15);
+}
+
+/* ==================== ELEMENTOS TIPOGRÁFICOS ==================== */
+
+/* Resaltado de valores importantes con color de acento */
+strong {
+	color: var(--accent);
+}
+
+/* Texto contextual secundario (p. ej., "Editando") */
+span {
+	display: flex;
+	float: right;
+	font-size: 0.9em;
+	color: var(--muted);
+}
+
+/* ==================== DIÁLOGOS MODALES ==================== */
+
+/*
+	Cuadro de diálogo modal centrado
+	Utilizado para notificaciones de éxito, error o confirmación
+*/
+dialog {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	margin: 0;
+	padding: 32px 36px;
+	max-width: 600px;
+	width: fit-content;
+	background: var(--card);
+	border: none;
+	border-radius: var(--radius);
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+	animation: dialogSlideUp 0.4s ease;
+}
+
+/* Animación de entrada del diálogo (slide up + fade in) */
+@keyframes dialogSlideUp {
+	from {
+		transform: translate(-50%, -45%);
+		opacity: 0;
+	}
+	to {
+		transform: translate(-50%, -50%);
+		opacity: 1;
+	}
+}
+
+/* Encabezado del diálogo con separador inferior */
+dialog h3 {
+	margin: 0 0 20px 0;
+	padding-bottom: 16px;
+	border-bottom: 2px solid #f7f9fb;
+	font-size: 1.4rem;
+	font-weight: 600;
+	color: var(--text);
+}
+
+/* Filas de información dentro del diálogo */
+dialog p {
+	margin: 0 0 14px 0;
+	padding: 12px 16px;
+	background: #f7f9fb;
+	border-radius: 6px;
+	border-left: 3px solid var(--accent);
+	font-size: 1rem;
+	color: var(--text);
+	transition: all 0.12s ease;
+}
+
+/* Resaltado de valores dentro del diálogo */
+dialog p strong {
+	margin-left: 4px;
+	font-weight: 600;
+	color: var(--accent);
+}
+
+/* ==================== MENSAJES DE ESTADO ==================== */
+
+/* Mensaje de confirmación de creación */
+dialog p#created {
+	border: 0;
+	color: var(--accent);
+	font-weight: 500;
+}
+
+/* Mensaje de confirmación de eliminación */
+dialog p#deleted {
+	border: 0;
+	color: var(--accent);
+	font-weight: 500;
+}
+
+/* Mensaje de error cuando no se encuentra un usuario */
+dialog p#notfound {
+	border: 0;
+	color: #991b1b;
+	font-weight: 500;
+}
+
+/* Resaltado del valor problemático en mensaje de error */
+dialog p#notfound strong {
+	padding: 0 6px 2px 6px;
+	background: #fca5a5;
+	border-radius: 4px;
+	color: #7f1d1d;
+}
