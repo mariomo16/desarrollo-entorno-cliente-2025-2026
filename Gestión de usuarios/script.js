@@ -1,28 +1,16 @@
 /**
- * @file script.js
  * @description Sistema CRUD para la gestión completa de usuarios con validación en tiempo real
  * @author Mario Morales Ortega
- * @version dev
- * @see {@link https://github.com/mariomo16/desarrollo-entorno-cliente-2025-2026/blob/main/Gesti%C3%B3n%20de%20usuarios/dev}
+ * @see {@link https://github.com/mariomo16/desarrollo-entorno-cliente-2025-2026/blob/main/Gesti%C3%B3n%20de%20usuarios}
+ * - searchUser() https://github.com/mariomo16/desarrollo-entorno-cliente-2023-2024/blob/main/U.T.%206./CRUD%20de%20clientes/crudClientesV2.js#L107
+ * - orderBySurname() https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#sorting_array_of_objects
+ * - updateUsers() https://stackoverflow.com/questions/76379507/how-to-update-json-file-in-database-using-fetch
  */
 
-// https://desarrolloweb.com/articulos/crear-api-rest-json-server.html
+// URL de la API
 const url = "http://localhost:3000/usuarios";
 
-/**
- * @typedef {Object} User
- * @property {string} dni - DNI o NIE del usuario en formato mayúsculas
- * @property {string} name - Nombre del usuario
- * @property {string} surname - Apellidos del usuario
- * @property {string} birthdate - Fecha de nacimiento en formato DD/MM/YYYY
- */
-
-/**
- * Array que almacena todos los usuarios
- * Los datos se persisten en localStorage para mantenerlos entre sesiones
- * @type {User[]}
- * @see {@link https://developer.mozilla.org/es/docs/Web/API/Fetch_API/Using_Fetch}
- */
+// Array que almacena todos los usuarios de forma local
 let users;
 
 // Obtiene todos los usuarios y los asigna a la variable users
@@ -52,7 +40,6 @@ async function fetchUsers() {
 }
 
 // Actualiza el usuario (objeto) pasado por parametro en users.json
-// https://stackoverflow.com/questions/76379507/how-to-update-json-file-in-database-using-fetch
 async function updateUsers(user) {
 	await fetch(`${url}/${user.id}`, {
 		method: "PUT",
@@ -74,58 +61,22 @@ async function deleteFromUsers(id) {
 	});
 }
 
-/**
- * Expresión regular para validar DNI o NIE
- * Formato: [XYZ]?[0-7][0-9]{6,7}[LETRA]
- * @type {RegExp}
- * @constant
- */
 const dniPattern = /^[XYZ]?\d{7,8}[TRWAGMYFPDXBNJZSQVHLCKE]$/i;
-
-/**
- * Expresión regular para validar nombres y apellidos
- * Permite letras (incluidos caracteres acentuados) y espacios entre palabras
- * @type {RegExp}
- * @constant
- */
 const namePattern = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+(\s[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+)*$/;
-
-/**
- * Expresión regular para validar fechas en formato ISO (YYYY-MM-DD)
- * @type {RegExp}
- * @constant
- */
 const datePattern = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
 
-/**
- * Color CSS para campos válidos
- * @type {string}
- * @constant
- */
 const VALID_COLOR = "var(--text)";
-
-/**
- * Color CSS para campos inválidos
- * @type {string}
- * @constant
- */
 const INVALID_COLOR = "#ef5350";
 
 // ==================== INICIALIZACIÓN DE EVENTOS ====================
 
-/**
- * Event listeners para las opciones del menú principal
- */
+// Event listeners para las opciones del menú principal
 document.getElementById("readUsers").addEventListener("click", readUsers);
 document.getElementById("createUser").addEventListener("click", createForm);
 document.getElementById("readUser").addEventListener("click", readUser);
 document.getElementById("updateUser").addEventListener("click", modifyUser);
 document.getElementById("deleteUser").addEventListener("click", deleteUser);
 
-/**
- * Event listener global para mostrar todos los usuarios con la tecla Escape
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent}
- */
 document.addEventListener("keydown", (event) => {
 	if (event.key === "Escape") {
 		readUsers();
@@ -135,22 +86,14 @@ document.addEventListener("keydown", (event) => {
 	}
 });
 
-/**
- * Elemento dialog para mostrar mensajes modales al usuario
- * @type {HTMLDialogElement}
- */
+// Elemento dialog para mostrar notificaciones al usuario
 const info = document.createElement("dialog");
 
 readUsers();
 
 // ==================== FUNCIONES DE LECTURA ====================
 
-/**
- * Muestra todos los usuarios almacenados en el sistema ordenados alfabéticamente por apellidos
- * Solo renderiza si no están ya mostrados (evita volver a generar)
- * Restablece el color del borde del input de búsqueda si está resaltado
- * @returns {void}
- */
+// Muestra todos los usuarios almacenados en el sistema ordenados alfabéticamente por apellidos
 async function readUsers() {
 	await getUsers();
 	sortBySurname();
@@ -175,12 +118,7 @@ async function readUsers() {
 	document.getElementById("search").focus();
 }
 
-/**
- * Muestra un usuario o usuarios específicos por su DNI/NIE o apellidos
- * Si se introduce un apellido parcial, puede devolver varios resultados ordenados alfabéticamente
- * Valida el input antes de realizar la búsqueda y muestra notificación si no existe
- * @returns {void}
- */
+// Muestra un usuario o usuarios específicos por su DNI/NIE o apellidos
 function readUser() {
 	const input = document.getElementById("search").value;
 	const inputResult = checkInput(input);
@@ -213,13 +151,7 @@ function readUser() {
 
 // ==================== FUNCIONES DE CREACIÓN ====================
 
-/**
- * Valida los datos del formulario y crea un nuevo usuario
- * Verifica que todos los campos cumplan con las expresiones regulares,
- * que el DNI/NIE no esté duplicado y convierte la fecha de ISO a formato DD/MM/YYYY
- * Muestra notificación de éxito tras la creación
- * @returns {void}
- */
+// Valida los datos del formulario y crea un nuevo usuario
 function newUser() {
 	const idInput = document.getElementById("dni");
 	const nameInput = document.getElementById("name");
@@ -253,13 +185,7 @@ function newUser() {
 	}
 }
 
-/**
- * Genera y muestra el formulario HTML para crear nuevos usuarios
- * Solo crea el formulario si no existe previamente
- * Restablece el color del borde del input de búsqueda si está resaltado
- * Configura los event listeners necesarios para la validación en tiempo real
- * @returns {void}
- */
+// Genera y muestra el formulario HTML para crear nuevos usuarios
 function createForm() {
 	if (document.getElementById("search").style.borderColor !== "#e2e5ea") {
 		document.getElementById("search").style.borderColor = "#e2e5ea";
@@ -292,12 +218,7 @@ function createForm() {
 	document.getElementById("dni").focus();
 }
 
-/**
- * Añade event listeners al formulario de creación de usuarios
- * Valida cada campo en tiempo real cambiando el color del texto según su validez
- * Utiliza un Map para asociar cada campo con su expresión regular correspondiente
- * @returns {void}
- */
+// Añade event listeners al formulario de creación de usuarios
 function addEvents() {
 	const createUserbtn = document.getElementById("newUser");
 	// Mapa con todos los campos del formulario y sus Regex
@@ -319,13 +240,7 @@ function addEvents() {
 
 // ==================== FUNCIONES DE ACTUALIZACIÓN ====================
 
-/**
- * Muestra el formulario de edición para un usuario específico
- * Valida el DNI/NIE del input de búsqueda antes de proceder
- * Permite editar nombre y apellidos mediante campos contenteditable
- * Limpia el input de búsqueda tras mostrar el formulario
- * @returns {void}
- */
+// Muestra el formulario de edición para un usuario específico
 function modifyUser() {
 	const input = document.getElementById("search").value;
 	if (checkInput(input) === undefined) {
@@ -354,13 +269,7 @@ function modifyUser() {
 		.addEventListener("click", updateUser);
 }
 
-/**
- * Actualiza los datos modificados de un usuario
- * Valida nombre y apellidos antes de guardar los cambios
- * Muestra feedback visual (borde rojo) en caso de datos inválidos
- * Si los datos son válidos, actualiza el usuario y muestra notificación de éxito
- * @returns {void}
- */
+// Si los datos son válidos, actualiza el usuario y muestra notificación de éxito
 function updateUser() {
 	const dni = document.getElementsByTagName("strong")[0].textContent;
 	const user = searchUser(dni);
@@ -413,12 +322,7 @@ function deleteUser() {
 
 // ==================== FUNCIONES AUXILIARES ====================
 
-/**
- * Valida el contenido del input de búsqueda
- * Cambia el color del borde según el estado de validación
- * @param {string} input - Valor del input a validar
- * @returns {undefined|boolean} undefined si está vacío, true si es válido, false si es inválido
- */
+// Valida el contenido del input de búsqueda y cambia el color del borde según el estado de validación
 function checkInput(input) {
 	if (input === "") {
 		document.getElementById("search").style.borderColor = INVALID_COLOR;
@@ -435,13 +339,7 @@ function checkInput(input) {
 	}
 }
 
-/**
- * Busca un usuario por DNI/NIE o filtra usuarios por apellidos parciales
- * La búsqueda es case-insensitive
- * @param {string} input - DNI/NIE o apellidos a buscar
- * @returns {User|User[]|undefined} Usuario encontrado, array de usuarios si hay coincidencias por apellidos, o undefined si no existe
- * @see {@link https://github.com/mariomo16/desarrollo-entorno-cliente-2023-2024/blob/main/U.T.%206./CRUD%20de%20clientes/crudClientesV2.js#L107}
- */
+// Busca un usuario por DNI/NIE o filtra usuarios por apellidos parciales
 function searchUser(input) {
 	const user =
 		dniPattern.test(input) === true
@@ -456,15 +354,7 @@ function searchUser(input) {
 	}
 }
 
-/**
- * Muestra notificaciones modales según el resultado de la operación
- * Utiliza un elemento dialog para mostrar información sobre creación,
- * actualización, eliminación o usuario no encontrado
- * @param {string|undefined} result - Tipo de operación: "create", "update", "delete", o undefined para error
- * @param {string} input - Valor de búsqueda (usado en caso de error)
- * @param {User} user - Datos del usuario afectado por la operación
- * @returns {void}
- */
+// Muestra notificaciones modales según el resultado de la operación utilizando un elemento dialog
 function notifications(result, input, user) {
 	switch (result) {
 		case "create":
@@ -508,11 +398,7 @@ function notifications(result, input, user) {
 	info.showModal();
 }
 
-/**
- * Ordena el array de usuarios alfabéticamente por apellidos
- * La ordenación es case-insensitive y modifica el array original
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#sorting_array_of_objects}
- */
+// Ordena el array de usuarios alfabéticamente por apellidos
 function sortBySurname() {
 	users.sort((a, b) => {
 		const surnameA = a.surname.toUpperCase();
@@ -529,11 +415,8 @@ function sortBySurname() {
 	});
 }
 
-/**
- * Limpia el contenedor principal eliminando todos los elementos hijos
- * También restablece el valor y el color del borde del input de búsqueda
- * @returns {void}
- */
+// Limpia el contenedor principal eliminando todos los elementos hijos
+// También restablece el valor y el color del borde del input de búsqueda
 function clear() {
 	const main = document.getElementById("main-content").children;
 	const mainLength = main.length;
