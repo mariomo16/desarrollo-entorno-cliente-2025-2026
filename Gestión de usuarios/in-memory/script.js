@@ -2,8 +2,8 @@
  * @file script.js
  * @description Sistema CRUD para la gestión completa de usuarios con validación en tiempo real
  * @author Mario Morales Ortega
- * @version 1.3.2
- * @see {@link https://github.com/mariomo16/desarrollo-entorno-cliente-2025-2026/blob/main/Gesti%C3%B3n%20de%20usuarios}
+ * @version 1.3.3
+ * @see {@link https://github.com/mariomo16/desarrollo-entorno-cliente-2025-2026/blob/main/Gesti%C3%B3n%20de%20usuarios/in-memory}
  */
 
 /**
@@ -154,6 +154,7 @@ readUsers();
  * @returns {void}
  */
 function readUsers() {
+    sortBySurname();
 	if (document.getElementById("search").style.borderColor !== "#e2e5ea") {
 		document.getElementById("search").style.borderColor = "#e2e5ea";
 	}
@@ -519,6 +520,27 @@ function notifications(result, input, user) {
 	info.style.outline = "none";
 	info.close();
 	info.showModal();
+}
+
+/**
+ * Ordena el array de usuarios alfabéticamente por apellidos
+ * La ordenación es case-insensitive y modifica el array original
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#sorting_array_of_objects}
+ */
+function sortBySurname() {
+	users.sort((a, b) => {
+		const surnameA = a.surname.toUpperCase();
+		const surnameB = b.surname.toUpperCase();
+		if (surnameA < surnameB) {
+			return -1;
+		}
+		if (surnameA > surnameB) {
+			return 1;
+		}
+
+		// Los apellidos son iguales
+		return 0;
+	});
 }
 
 /**
