@@ -25,11 +25,24 @@ const url = "http://localhost:3000/usuarios";
  */
 let users;
 
+// Obtiene todos los usuarios y los asigna a la variable users
 async function getUsers() {
-	users = await fetchServer();
+	users = await fetchUsers();
 }
 
-async function fetchServer() {
+// Añade el usuario (objeto) pasado por parametro a users.json
+function createUser(user) {
+	fetch(url, {
+		method: "POST",
+		body: JSON.stringify(user),
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
+}
+
+// Lee y devuelve todos los usuarios del archivo users.json
+async function fetchUsers() {
 	return fetch(url, {
 		method: "GET",
 		headers: {
@@ -38,8 +51,10 @@ async function fetchServer() {
 	}).then((response) => response.json());
 }
 
-async function updateUsers(id, user) {
-	await fetch(`${url}/${id}`, {
+// Actualiza el usuario (objeto) pasado por parametro en users.json
+// https://stackoverflow.com/questions/76379507/how-to-update-json-file-in-database-using-fetch
+async function updateUsers(user) {
+	await fetch(`${url}/${user.id}`, {
 		method: "PUT",
 		body: JSON.stringify(user),
 		headers: {
@@ -48,10 +63,11 @@ async function updateUsers(id, user) {
 	});
 }
 
-async function deleteFromUsers(id, user) {
+// Elimina el usuario por id del archivo users.json
+async function deleteFromUsers(id) {
 	await fetch(`${url}/${id}`, {
 		method: "DELETE",
-		body: JSON.stringify(user),
+		body: JSON.stringify(id),
 		headers: {
 			"Content-Type": "application/json",
 		},
@@ -238,21 +254,6 @@ function newUser() {
 }
 
 /**
- * Añade un nuevo usuario al array de usuarios
- * @param {User} user - Objeto usuario con todos sus datos
- * @returns {void}
- */
-function createUser(user) {
-	fetch(url, {
-		method: "POST",
-		body: JSON.stringify(user),
-		headers: {
-			"Content-Type": "application/json",
-		},
-	});
-}
-
-/**
  * Genera y muestra el formulario HTML para crear nuevos usuarios
  * Solo crea el formulario si no existe previamente
  * Restablece el color del borde del input de búsqueda si está resaltado
@@ -370,7 +371,7 @@ function updateUser() {
 		clear();
 		user.name = userName;
 		user.surname = userSurname;
-		updateUsers(user.id, user);
+		updateUsers(user);
 		notifications("update", "", user);
 	} else {
 		// Validación visual: cambia el color del borde según la validez del campo
@@ -406,7 +407,7 @@ function deleteUser() {
 		notifications(undefined, input);
 		return;
 	}
-	deleteFromUsers(user.id, user);
+	deleteFromUsers(user.id);
 	notifications("delete", input, user);
 }
 
