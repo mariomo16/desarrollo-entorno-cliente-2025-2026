@@ -1,11 +1,11 @@
 //Definimos e iniciamos las variables necesarias
-var y = 0;
-var x = 0;
-var controlY = 1;
-var controlX = 1;
-var velocidad = 1;
+let y = 0;
+let x = 0;
+let controlY = 1;
+let controlX = 1;
+const velocidad = 1;
 
-var intervalo = setInterval(mover, 5);
+const intervalo = setInterval(mover, 5);
 
 function mover() {
 	if (controlX === 1) {
