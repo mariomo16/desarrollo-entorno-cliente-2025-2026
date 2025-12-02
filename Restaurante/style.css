@@ -1,0 +1,10 @@
+#menu-button {
+	width: 35px;
+	height: 35px;
+	float: right;
+}
+
+#menu-button:hover {
+	color: lightblue;
+	cursor: pointer;
+}
