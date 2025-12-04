@@ -6,24 +6,54 @@
         <title>Gestión de mesas</title>
         <script src="./script.js" defer></script>
         <link rel="stylesheet" href="style.css" />
+        <style>
+            svg {
+                position: absolute;
+            }
+        </style>
     </head>
     <body>
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            class="bi bi-plus-square"
-            viewBox="0 0 16 16"
-            id="menu-button"
-        >
-            <path
-                d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"
-            />
-            <path
-                d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"
-            />
-        </svg>
-        <div id="lienzo"></div>
+        <div id="lienzo">
+            <svg
+                id="plano"
+                xmlns="http://www.w3.org/2000/svg"
+                width="1320"
+                height="610"
+                viewBox="0 0 1320 620"
+            >
+                <style>
+                    .wall {
+                        fill: none;
+                        stroke: #333;
+                        stroke-width: 2;
+                    }
+                    .bar {
+                        fill: #444;
+                        stroke: #222;
+                        stroke-width: 2;
+                    }
+                    .text {
+                        font-family: sans-serif;
+                        font-size: 20px;
+                        fill: #333;
+                    }
+                </style>
+
+                <rect x="25" y="40" width="1300" height="560" class="wall" />
+
+                <rect x="610" y="40" width="80" height="5" fill="#888" />
+                <text class="text" x="615" y="30">Entrada</text>
+
+                <rect
+                    x="1000"
+                    y="120"
+                    width="220"
+                    height="380"
+                    rx="8"
+                    class="bar"
+                />
+                <text class="text" x="1015" y="110">Barra</text>
+            </svg>
+        </div>
     </body>
 </html>
