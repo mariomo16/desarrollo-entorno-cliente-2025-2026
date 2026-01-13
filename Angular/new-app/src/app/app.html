@@ -1,4 +1,4 @@
-<app-videojuego-component ngIf="mostrar_videojuegos"></app-videojuego-component>
+<app-videojuego-component *ngIf="mostrar_videojuegos"></app-videojuego-component>
 <app-zapatillas-component></app-zapatillas-component>
 <button (click)="ocultarVideojuegos()">Ocultar videojuegos</button>
 <router-outlet />
