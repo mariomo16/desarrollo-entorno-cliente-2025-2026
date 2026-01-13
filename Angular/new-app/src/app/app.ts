@@ -3,6 +3,7 @@ import { Component, signal } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 import { VideojuegoComponent } from "./components/videojuego-component/videojuego-component";
 import { ZapatillasComponent } from "./components/zapatillas-component/zapatillas-component";
+import { Configuracion } from "./models/configuracion";
 
 @Component({
 	selector: "app-root",
@@ -18,6 +19,13 @@ import { ZapatillasComponent } from "./components/zapatillas-component/zapatilla
 export class App {
 	protected readonly title = signal("new-app");
 	public mostrar_videojuegos: boolean = true;
+	public titulo: string;
+	public descripcion: string;
+
+	constructor() {
+		this.titulo = Configuracion.titulo;
+		this.descripcion = Configuracion.descripcion;
+	}
 
 	public ocultarVideojuegos() {
 		this.mostrar_videojuegos = !this.mostrar_videojuegos;
