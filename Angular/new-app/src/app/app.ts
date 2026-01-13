@@ -20,6 +20,6 @@ export class App {
 	public mostrar_videojuegos: boolean = true;
 
 	public ocultarVideojuegos() {
-		this.mostrar_videojuegos = false;
+		this.mostrar_videojuegos = !this.mostrar_videojuegos;
 	}
 }
