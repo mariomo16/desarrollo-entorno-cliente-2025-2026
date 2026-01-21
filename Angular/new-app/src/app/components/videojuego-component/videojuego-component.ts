@@ -1,8 +1,9 @@
 import { Component, OnInit, DoCheck, OnDestroy } from "@angular/core";
+import { RouterModule } from "@angular/router";
 
 @Component({
 	selector: "app-videojuego-component",
-	imports: [],
+	imports: [RouterModule],
 	templateUrl: "./videojuego-component.html",
 	styleUrl: "./videojuego-component.css",
 })
