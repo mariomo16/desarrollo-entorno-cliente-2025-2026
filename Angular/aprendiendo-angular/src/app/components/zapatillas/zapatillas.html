@@ -26,6 +26,23 @@
     }
 </ul>
 
+<p>El color de la mayoria de nuestras zapatillas es: <span [style]="{'background-color': color}">
+@switch (color) {
+    @case ('yellow') {
+        Amarillo
+    }
+    @case ('red') {
+        Rojo
+    }
+    @case ('blue') {
+        Azul
+    }
+    @case ('orange') {
+        Naranja
+    }
+}
+</span></p>
+
 <br />
 <a routerLink="/home">Ir a Home</a><br />
 <a routerLink="/videojuegos">Ir a Videojuegos</a>

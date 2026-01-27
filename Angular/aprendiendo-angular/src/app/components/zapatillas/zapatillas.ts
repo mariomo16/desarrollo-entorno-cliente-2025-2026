@@ -23,7 +23,7 @@ export class Zapatillas {
 			new Zapatilla("Adidas Yeezy", "Adidas", "Gris", 180, false),
 		];
 		this.marcas = [];
-		this.color = "";
+		this.color = "yellow";
 		this.miMarca = "";
 	}
 
