@@ -5,3 +5,8 @@
 * {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
+.altoPrecio {
+    color: gray;
+    font-size: 18px;
+}
