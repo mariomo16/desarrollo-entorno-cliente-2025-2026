@@ -22,7 +22,11 @@
     @for (deportiva of zapatillas; track $index) {
         <li>
             <span [style]="{ 'text-decoration' : !deportiva.stock ? 'line-through' : 'none' }">
-                {{ deportiva.nombre }} - <strong [class.altoPrecio]="deportiva.precio >= 80">{{ deportiva.precio }}€</strong>
+                {{ deportiva.nombre }} - <strong [class.altoPrecio]="deportiva.precio >= 80" [class]="{
+                    'fondoRojo' : deportiva.precio > 100, 
+                    'subrayado' : deportiva.marca == 'Nike'
+                    }"
+                    >{{ deportiva.precio }}€</strong>
             </span>
 
             @if (deportiva.precio <= 80) {
