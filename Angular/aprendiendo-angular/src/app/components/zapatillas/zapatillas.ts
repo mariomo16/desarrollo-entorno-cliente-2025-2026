@@ -28,7 +28,13 @@ export class Zapatillas {
 		this.miMarca = "Champion";
 	}
 
-    getMarcas() {
+	ngOnInit() {
+		console.log(this.zapatillas);
+
+		this.getMarcas();
+	}
+
+	getMarcas() {
 		this.zapatillas.forEach((zapatilla, index) => {
 			if (this.marcas.indexOf(zapatilla.marca) < 0) {
 				this.marcas.push(zapatilla.marca);
@@ -40,21 +46,23 @@ export class Zapatillas {
 		console.log(this.marcas);
 	}
 
-    getMarca() {
-        alert(this.miMarca);
-    }
+	getMarca() {
+		alert(this.miMarca);
+	}
 
-    addMarca() {
-        this.marcas.push(this.miMarca);
-    }
+	addMarca() {
+		this.marcas.push(this.miMarca);
+	}
 
-    borrarMarca(index: number) {
-        this.marcas.splice(index, 1);
-    }
+	borrarMarca(index: number) {
+		this.marcas.splice(index, 1);
+	}
 
-	ngOnInit() {
-		console.log(this.zapatillas);
+	onBlur() {
+		console.log("Has salido del campo de marcas");
+	}
 
-		this.getMarcas();
+	mostrarPalabra() {
+		alert(this.miMarca);
 	}
 }
