@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { RouterLink } from "@angular/router";
 import { Zapatilla } from "../../models/Zapatilla";
+import { ZapatillaService } from "../../services/zapatilla-service";
 
 @Component({
 	selector: "app-zapatillas",
@@ -11,25 +12,26 @@ import { Zapatilla } from "../../models/Zapatilla";
 })
 export class Zapatillas {
 	public titulo: string;
-	public zapatillas: Array<Zapatilla>;
+	public zapatillas: Array<Zapatilla> = [];
 	public marcas: string[];
 	public color: string;
 	public miMarca: string;
 
-	constructor() {
+	constructor(private _ZapatillaService: ZapatillaService) {
 		this.titulo = "Componente Zapatillas";
-		this.zapatillas = [
-			new Zapatilla("Reebok Classic", "Reebok", "Blanco", 80, true),
-			new Zapatilla("Nike MD Runner", "Nike", "Negro", 60, true),
-			new Zapatilla("Adidas Yeezy", "Adidas", "Gris", 180, false),
-		];
+		// this.zapatillas = [
+		// 	new Zapatilla("Reebok Classic", "Reebok", "Blanco", 80, true),
+		// 	new Zapatilla("Nike MD Runner", "Nike", "Negro", 60, true),
+		// 	new Zapatilla("Adidas Yeezy", "Adidas", "Gris", 180, false),
+		// ];
 		this.marcas = [];
 		this.color = "yellow";
 		this.miMarca = "Champion";
 	}
 
 	ngOnInit() {
-		console.log(this.zapatillas);
+		this.zapatillas = this._ZapatillaService.getZapatillas();
+		alert(this._ZapatillaService.getTexto());
 
 		this.getMarcas();
 	}
