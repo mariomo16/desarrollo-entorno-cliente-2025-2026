@@ -7,6 +7,11 @@ import { ZapatillasComponent } from "./components/zapatillas-component/zapatilla
 export const routes: Routes = [
 	{
 		path: "",
+        pathMatch: "full",
+		redirectTo: "home",
+	},
+	{
+		path: "home",
 		component: Home,
 	},
 	{
