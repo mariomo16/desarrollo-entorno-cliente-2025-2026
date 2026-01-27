@@ -1,0 +1,16 @@
+<h2>Página principal</h2>
+
+@if (identificado) {
+    <div>
+        <h3>Estas identificado en la aplicación</h3>
+    </div>
+} @else {
+    <p>No estas identificado, pulsa este botón para identificarte</p>
+}
+<button (click)="toggleIdentificado()">Alternar identificacion</button>
+
+<br />
+<br />
+
+<a routerLink="/videojuegos">Ir a Videojuegos</a><br />
+<a routerLink="/zapatillas">Ir a Zapatillas</a>

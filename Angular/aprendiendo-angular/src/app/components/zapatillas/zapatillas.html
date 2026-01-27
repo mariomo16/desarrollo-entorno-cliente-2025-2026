@@ -1,0 +1,31 @@
+<h2>{{ titulo }}</h2>
+<p>Compra las zapatillas de las mejores marcas</p>
+<ul>
+    @for (marca of marcas; track $index) {
+        <li>
+            {{ $index + " " + marca }}
+        </li>
+    }
+</ul>
+
+<p>Las deportivas que tenemos disponibles son:</p>
+<ul>
+    @for (deportiva of zapatillas; track $index) {
+        <li>
+            <span [style]="{ 'text-decoration' : !deportiva.stock ? 'line-through' : 'none' }">
+                {{ deportiva.nombre }} - <strong>{{ deportiva.precio }}€</strong>
+            </span>
+
+            @if (deportiva.precio <= 80) {
+                <span 
+                [style.background]="deportiva.precio < 80 ? 'green' : 'transparent'"
+                [style.color]="deportiva.precio < 80 ? 'white' : 'black'"
+                > ¡EN OFERTA!</span>
+            }
+        </li>
+    }
+</ul>
+
+<br />
+<a routerLink="/home">Ir a Home</a><br />
+<a routerLink="/videojuegos">Ir a Videojuegos</a>
