@@ -11,7 +11,8 @@
 <ul>
     @for (marca of marcas; track $index) {
         <li>
-            {{ $index + " " + marca }}
+            {{ '(' + $index + ') ' + marca}}
+            <button (click)="borrarMarca($index)">Borrar</button>
         </li>
     }
 </ul>

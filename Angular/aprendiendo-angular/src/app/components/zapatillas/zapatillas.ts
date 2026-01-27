@@ -48,6 +48,10 @@ export class Zapatillas {
         this.marcas.push(this.miMarca);
     }
 
+    borrarMarca(index: number) {
+        this.marcas.splice(index, 1);
+    }
+
 	ngOnInit() {
 		console.log(this.zapatillas);
 
