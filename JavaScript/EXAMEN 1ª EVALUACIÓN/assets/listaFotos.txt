@@ -1,0 +1,22 @@
+ El volumen de la unidad C no tiene etiqueta.
+ El n£mero de serie del volumen es: 01E4-A8D0
+
+ Directorio de C:\Users\JuanPedro\Downloads\Cosas\assets
+
+13/11/2025  11:00    <DIR>          .
+13/11/2025  11:00    <DIR>          ..
+28/10/2025  05:27            74.104 FB_IMG_1645211597935.jpg
+28/10/2025  05:27            83.212 FB_IMG_1667318456231.jpg
+28/10/2025  05:27            22.089 FB_IMG_1676156609518.jpg
+28/10/2025  05:27            45.624 FB_IMG_1678917723620.jpg
+28/10/2025  05:27            95.477 FB_IMG_1685577146004.jpg
+28/10/2025  05:27            63.303 FB_IMG_1699051552872.jpg
+28/10/2025  05:27            64.025 FB_IMG_1707866644354.jpg
+28/10/2025  05:27            48.594 FB_IMG_1710110154308.jpg
+28/10/2025  05:27            50.439 FB_IMG_1720364233499.jpg
+28/10/2025  05:27            70.672 FB_IMG_1726606799593.jpg
+28/10/2025  05:27            58.499 FB_IMG_1728254853733.jpg
+28/10/2025  05:27            52.323 IMG_20231013_213234_555.jpg
+13/11/2025  11:00                 0 listaFotos.txt
+              13 archivos        728.361 bytes
+               2 dirs  112.916.406.272 bytes libres
