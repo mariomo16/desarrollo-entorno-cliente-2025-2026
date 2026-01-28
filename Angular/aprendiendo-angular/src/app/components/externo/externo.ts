@@ -1,9 +1,10 @@
 import { Component } from "@angular/core";
+import { RouterLink } from "@angular/router";
 import { PeticionesService } from "../../services/peticiones-service";
 
 @Component({
 	selector: "app-externo",
-	imports: [],
+	imports: [RouterLink],
 	providers: [PeticionesService],
 	templateUrl: "./externo.html",
 	styleUrl: "./externo.css",
