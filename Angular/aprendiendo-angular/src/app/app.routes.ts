@@ -1,4 +1,5 @@
 import { Routes } from "@angular/router";
+import { Externo } from "./components/externo/externo";
 import { Home } from "./components/home/home";
 import { NotFound } from "./components/not-found/not-found";
 import { Videojuegos } from "./components/videojuegos/videojuegos";
@@ -21,6 +22,10 @@ export const routes: Routes = [
 	{
 		path: "zapatillas",
 		component: Zapatillas,
+	},
+    {
+		path: "externo",
+		component: Externo,
 	},
 	{
 		path: "**",
