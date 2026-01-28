@@ -18,8 +18,8 @@ export class Externo {
 		this._peticionesServices.getUser().subscribe({
 			next: (result) => {
 				this.user = result;
+				console.log(this.user);
 				this.user = this.user.results[0];
-                console.log(this.user);
 			},
 			error: (error) => {
 				console.error(error);
