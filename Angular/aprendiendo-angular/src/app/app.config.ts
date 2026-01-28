@@ -1,6 +1,6 @@
 import { provideHttpClient, withFetch } from "@angular/common/http";
 import {
-	type ApplicationConfig,
+	ApplicationConfig,
 	provideBrowserGlobalErrorListeners,
 } from "@angular/core";
 import {
@@ -9,7 +9,6 @@ import {
 } from "@angular/platform-browser";
 import { provideRouter } from "@angular/router";
 import { routes } from "./app.routes";
-
 
 export const appConfig: ApplicationConfig = {
 	providers: [
