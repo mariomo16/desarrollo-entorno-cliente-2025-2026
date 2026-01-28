@@ -12,9 +12,18 @@ import { PeticionesService } from "../../services/peticiones-service";
 export class Externo {
 	public user: any;
 
-	constructor(private _peticionesServices: PeticionesService) {}
+	constructor(private _peticionesServices: PeticionesService) {
+        this.cargarUsuario();
+    }
 
 	ngOnInit() {
+    }
+    
+    ngDoCheck() {
+        
+    }
+
+	cargarUsuario() {
 		this._peticionesServices.getUser().subscribe({
 			next: (result) => {
 				this.user = result;

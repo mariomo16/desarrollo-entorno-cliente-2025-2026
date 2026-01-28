@@ -1,6 +1,8 @@
-<p>Nombre: {{ user.name.first + user.name.last }}</p>
-<p>Correo electrónico: {{ user.email }}</p>
-<img src="{{ user.picture.large }}">
+@if (user) {
+    <p>Nombre: {{ user.name.first + " " + user.name.last }}</p>
+    <p>Correo electrónico: {{ user.email }}</p>
+    <img src="{{ user.picture.large }}">
+}
 
 <br />
 <br />
